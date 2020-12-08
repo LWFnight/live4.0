@@ -2,9 +2,9 @@ package com.example.live.controller;
 
 import com.example.live.pojo.User;
 import com.example.live.service.UserService;
+import com.example.live.utils.ImgToJson;
 import com.example.live.utils.SendEmail;
 import com.example.live.utils.VerificationCode;
-import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 @SessionAttributes(value = {"users","userLoginInfo"})
@@ -97,4 +98,5 @@ public class UserController {
             return "login";
         }
     }
+
 }
