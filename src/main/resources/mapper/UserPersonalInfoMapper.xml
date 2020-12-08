@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.UserPersonalInfoMapper">
+
+    <resultMap id="userPersonalInfoMap" type="UserPersonalInfo">
+        <id property="user_id" column="user_id"/>
+        <result property="head_portrait" column="head_portrait"/>
+        <result property="age" column="age"/>
+        <result property="job" column="job"/>
+        <result property="hobby" column="hobby"/>
+    </resultMap>
+
+    <select id="find" resultMap="userPersonalInfoMap">
+        select *
+        from personal_information
+        where user_id=#{user_id}
+    </select>
+
+    <insert id="insert" parameterType="UserPersonalInfo">
+        insert into personal_information(user_id,head_portrait,age,job,hobby)
+        values(#{user_id},#{head_portrait},#{age},#{job},#{hobby})
+    </insert>
+
+    <delete id="delete" flushCache="true">
+        delete from personal_information where user_id=#{user_id}
+    </delete>
+
+    <update id="update" parameterType="UserPersonalInfo">
+        update personal_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="head_portrait !=null and head_portrait !=''">head_portrait=#{head_portrait},</if>
+            <if test="age !=null">age=#{age},</if>
+            <if test="job !=null and job !=''">job=#{job},</if>
+            <if test="hobby !=null and hobby !=''">hobby=#{hobby},</if>
+        </trim>
+        where user_id=#{user_id}
+    </update>
+
+</mapper>

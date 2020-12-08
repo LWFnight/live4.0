@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.UserMapper">
+
+    <resultMap id="userMap" type="User">
+        <id property="user_id" column="user_id"></id>
+        <result property="name" column="userName"/>
+        <result property="gender" column="gender"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="role_id" column="urole_id"/>
+        <result property="phone" column="phone"/>
+        <association property="userRole" javaType="UserRole">
+            <id property="role_id" column="rrole_id"></id>
+            <result property="name" column="roleName"></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="userPersonalInfoMap" type="User">
+        <id property="user_id" column="uuser_id"></id>
+        <result property="name" column="userName"/>
+        <result property="gender" column="gender"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="role_id" column="urole_id"/>
+        <result property="phone" column="phone"/>
+        <association property="userRole" javaType="UserRole">
+            <id property="role_id" column="rrole_id"></id>
+            <result property="name" column="roleName"></result>
+        </association>
+        <association property="userPersonalInfo" javaType="UserPersonalInfo">
+            <id property="user_id" column="upuser_id"/>
+            <result property="head_portrait" column="head_portrait"/>
+            <result property="age" column="age"/>
+            <result property="job" column="job"/>
+            <result property="hobby" column="hobby"/>
+        </association>
+    </resultMap>
+
+    <select id="findUsers" resultMap="userMap">
+        select user_id,u.name as userName,gender,email,password,u.role_id as urole_id,u.phone,r.role_id as rrole_id,r.name as roleName
+        from user u,role r
+        where u.role_id = r.role_id
+        <if test="user_id !=null">and user_id=#{user_id}</if>
+        <if test="name !=null and name !=''">and u.name=#{name}</if>
+        <if test="gender !=null and gender !=''">and gender=#{gender}</if>
+        <if test="email !=null and email !=''">and email=#{email}</if>
+        <if test="phone !=null and phone !=''">and phone=#{phone}</if>
+    </select>
+
+    <select id="findUserPersonalInfo" resultMap="userPersonalInfoMap">
+        select u.user_id as uuser_id,u.name as userName,gender,email,password,u.role_id as urole_id,u.phone,
+        r.role_id as rrole_id,r.name as roleName,
+        up.user_id as upuser_id,up.head_portrait,up.age,up.job,up.hobby
+        from user u,role r,personal_information up
+        where u.user_id=#{user_id}
+        and u.user_id = up.user_id
+        and u.role_id = r.role_id
+    </select>
+
+    <insert id="insertUser" parameterType="User">
+        insert into user(name,gender,email,password,role_id,phone)
+        values(#{name},#{gender},#{email},#{password},#{role_id},#{phone})
+    </insert>
+
+    <delete id="deleteUserByUserId" flushCache="true">
+        delete from user where user_id=#{user_id}
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name !=null and name !=''">name=#{name},</if>
+            <if test="gender !=null and gender !=''">gender=#{gender},</if>
+            <if test="email !=null and email !=''">email=#{email},</if>
+            <if test="password !=null and password !=''">password=#{password},</if>
+            <if test="role_id !=null">role_id=#{role_id},</if>
+            <if test="phone !=null and phone !=''">phone=#{phone},</if>
+        </trim>
+        where user_id=#{user_id}
+    </update>
+
+</mapper>
