@@ -32,9 +32,10 @@ public class UserController {
     @RequestMapping(value = "login",method = RequestMethod.POST)
     public String login(User userdto,Model model){
         List<User> users = new ArrayList<>();
-        System.out.println(userdto.getUser_id()+"\t"+userdto.getEmail()+"\t"+userdto.getPhone()+"\t"+userdto.getPassword());
+//        System.out.println(userdto.getUser_id()+"\t"+userdto.getEmail()+"\t"+userdto.getPhone()+"\t"+userdto.getPassword());
         users = userService.findUsers(userdto);
         if (users.size()!=0 && users.get(0).getPassword().equals(userdto.getPassword())){
+            System.out.println(users.get(0).getUser_id());
             model.addAttribute("userLoginInfo",users.get(0));
             return "hello";
         }
@@ -46,9 +47,9 @@ public class UserController {
         List<User> users = new ArrayList<>();
         users = userService.findUsers(userdto);
         model.addAttribute("users",users);
-//        for (User user : users) {
-//            System.out.println(user.getUser_id()+"\t"+user.getName()+"\t"+user.getGender()+"\t"+user.getEmail()+"\t"+user.getPassword());
-//        }
+        for (User user : users) {
+            System.out.println(user.getUser_id()+"\t"+user.getName()+"\t"+user.getGender()+"\t"+user.getEmail()+"\t"+user.getPassword());
+        }
         return "hello";
     }
 

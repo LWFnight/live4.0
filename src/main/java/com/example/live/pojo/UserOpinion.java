@@ -6,16 +6,26 @@ public class UserOpinion {
     private String opinion;
     private String picture;
     private Integer star;
+    private String pictureUrl;
 
     public UserOpinion() {
     }
 
-    public UserOpinion(Integer opinion_id, Integer user_id, String opinion, String picture, Integer star) {
+    public UserOpinion(Integer opinion_id, Integer user_id, String opinion, String picture, Integer star, String pictureUrl) {
         this.opinion_id = opinion_id;
         this.user_id = user_id;
         this.opinion = opinion;
         this.picture = picture;
         this.star = star;
+        this.pictureUrl = pictureUrl;
+    }
+
+    public UserOpinion(Integer user_id, String opinion, String picture, Integer star, String pictureUrl) {
+        this.user_id = user_id;
+        this.opinion = opinion;
+        this.picture = picture;
+        this.star = star;
+        this.pictureUrl = pictureUrl;
     }
 
     public Integer getOpinion_id() {
@@ -56,5 +66,13 @@ public class UserOpinion {
 
     public void setStar(Integer star) {
         this.star = star;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureName(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

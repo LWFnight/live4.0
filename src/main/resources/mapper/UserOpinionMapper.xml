@@ -9,6 +9,7 @@
         <result property="opinion" column="opinion"/>
         <result property="picture" column="picture"/>
         <result property="star" column="star"/>
+        <result property="pictureUrl" column="pictureUrl"/>
     </resultMap>
 
     <select id="find" resultMap="userOpinionMap">
@@ -18,11 +19,11 @@
     </select>
 
     <insert id="insert" parameterType="UserOpinion">
-        insert into user_opinion(user_id,opinion,picture,star)
-        values(#{user_id},#{opinion},#{picture},#{star})
+        insert into user_opinion(user_id,opinion,picture,star,pictureUrl)
+        values(#{user_id},#{opinion},#{picture},#{star},#{pictureUrl})
     </insert>
 
-    <delete id="delete" flushCache="true">
+    <delete id="deleteById" flushCache="true">
         delete from user_opinion where opinion_id=#{opinion_id}
     </delete>
 
@@ -32,6 +33,7 @@
             <if test="opinion !=null and opinion !=''">opinion=#{opinion},</if>
             <if test="picture !=null and picture !=''">picture=#{picture},</if>
             <if test="star !=null and star !=''">star=#{star},</if>
+            <if test="pictureUrl !=null and pictureUrl !=''">pictureUrl=#{pictureUrl},</if>
         </trim>
         where opinion_id=#{opinion_id} and user_id = #{user_id}
     </update>
