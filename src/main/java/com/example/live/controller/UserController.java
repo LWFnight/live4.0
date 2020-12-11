@@ -94,7 +94,7 @@ public class UserController {
             //发送验证邮件
             System.out.println(email);
             SendEmail emailCode = new SendEmail();
-            emailCode.sendEmail("wo319039695@163.com",randomCode);//sendEmail(收件人邮箱，验证码)
+            emailCode.sendEmail(email,randomCode);//sendEmail(收件人邮箱，验证码)
             return "login";
         }catch (Exception e){
             return "login";

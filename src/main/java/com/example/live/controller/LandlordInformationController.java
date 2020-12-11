@@ -4,8 +4,8 @@ package com.example.live.controller;
 import com.example.live.pojo.LandlordInformation;
 import com.example.live.pojo.User;
 import com.example.live.service.LandlordInformationService;
+import com.example.live.service.UserService;
 import com.example.live.utils.ImgToJson;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +25,18 @@ public class LandlordInformationController {
     @Autowired
     private LandlordInformationService landlordInformationService;
 
+    @Autowired
+    private UserService userService;
+
     private String savePath = "D:\\live\\imgs\\LandlordInfomation";
 
     @RequestMapping(value = "findLandlordInformationList",method = RequestMethod.GET)
-    public String findLandlordInformationList(LandlordInformation landlordInformation, Model model){
+    public String findLandlordInformationList(LandlordInformation landlordInformation){
         List<LandlordInformation> landlordInformations = new ArrayList<>();
         landlordInformations = landlordInformationService.find(landlordInformation);
-        model.addAttribute("landlordInformations",landlordInformations);
+        for (LandlordInformation information : landlordInformations) {
+            System.out.println(information.getUser_id()+"\t"+information.getUser().getName());
+        }
         return "login";
     }
 
@@ -101,12 +106,25 @@ public class LandlordInformationController {
         //所有普通用户更新房东信息都要重新审批
         landlordInformation.setStatus("待审批");
         landlordInformationService.update(landlordInformation);
+        User user1 = new User();
+        user1.setRole_id(4);
+        userService.updateUser(user1);
         return "login";
     }
 
     @RequestMapping(value = "adminUpdateLandlordInfomation",method = RequestMethod.POST)
     public String  adminUpdateLandlordInfomation(LandlordInformation landlordInformation){
-        landlordInformationService.update(landlordInformation);
+        User user = new User();
+        if (landlordInformation.getStatus() =="审批通过"){
+            user.setRole_id(5);
+            userService.updateUser(user);
+            landlordInformationService.update(landlordInformation);
+        }else {
+            user.setRole_id(4);
+            userService.updateUser(user);
+            landlordInformationService.update(landlordInformation);
+        }
+
         return "login";
     }
 }

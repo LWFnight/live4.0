@@ -11,6 +11,8 @@ public class LandlordInformation {
     private String id_card_picture_f_url;
     private String id_card_picture_r_url;
 
+    private User user;
+
     public LandlordInformation() {
     }
 
@@ -96,5 +98,13 @@ public class LandlordInformation {
 
     public void setId_card_picture_r_url(String id_card_picture_r_url) {
         this.id_card_picture_r_url = id_card_picture_r_url;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

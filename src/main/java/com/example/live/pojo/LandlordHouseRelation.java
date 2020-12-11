@@ -5,16 +5,16 @@ import java.util.Date;
 public class LandlordHouseRelation {
     private Integer user_id;
     private Integer house_id;
-    private Integer realtion_id;
+    private Integer relation_id;
     private Date publish_time;
 
     public LandlordHouseRelation() {
     }
 
-    public LandlordHouseRelation(Integer user_id, Integer house_id, Integer realtion_id, Date publish_time) {
+    public LandlordHouseRelation(Integer user_id, Integer house_id, Integer relation_id, Date publish_time) {
         this.user_id = user_id;
         this.house_id = house_id;
-        this.realtion_id = realtion_id;
+        this.relation_id = relation_id;
         this.publish_time = publish_time;
     }
 
@@ -34,12 +34,12 @@ public class LandlordHouseRelation {
         this.house_id = house_id;
     }
 
-    public Integer getRealtion_id() {
-        return realtion_id;
+    public Integer getRelation_id() {
+        return relation_id;
     }
 
-    public void setRealtion_id(Integer realtion_id) {
-        this.realtion_id = realtion_id;
+    public void setRelation_id(Integer relation_id) {
+        this.relation_id = relation_id;
     }
 
     public Date getPublish_time() {

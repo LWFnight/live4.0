@@ -27,6 +27,8 @@ public class House {
 
     private LandlordHouseRelation landlordHouseRelation;
 
+    private Allocation allocation;
+
     public House() {
     }
 
@@ -246,5 +248,13 @@ public class House {
 
     public void setLandlordHouseRelation(LandlordHouseRelation landlordHouseRelation) {
         this.landlordHouseRelation = landlordHouseRelation;
+    }
+
+    public Allocation getAllocation() {
+        return allocation;
+    }
+
+    public void setAllocation(Allocation allocation) {
+        this.allocation = allocation;
     }
 }

@@ -72,7 +72,6 @@ public class UserOpinionController {
 
     @RequestMapping(value = "deleteUserOpinion",method = RequestMethod.GET)
     public String deleteUserOpinion(Integer opinion_id){
-        opinion_id = 1;
         userOpinionService.deleteById(opinion_id);
         return "login";
     }

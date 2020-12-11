@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -58,6 +60,30 @@ public class HouseController {
         Integer user_id = user.getUser_id();
         List<House> houses = new ArrayList<>();
         houses = houseService.findHouseByUserId(user_id);
+        System.out.println(user_id);
+        Integer i = 512;
+        for (House house : houses) {
+            System.out.println(house.getHouse_id());
+        }
+        return "login";
+    }
+
+    public String deleteHouseById(Integer house_id){
+        houseService.deleteById(house_id);
+        return "login";
+    }
+
+    public String updateHouse(House house){
+        houseService.update(house);
+        return "login";
+    }
+
+    @RequestMapping(value = "test",method = RequestMethod.GET)
+    public String insert(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        simpleDateFormat.format(new Date());
+        System.out.println(simpleDateFormat.format(now));
         return "login";
     }
 }
