@@ -4,18 +4,23 @@
 <mapper namespace="com.example.live.mapper.UserOpinionMapper">
 
     <resultMap id="userOpinionMap" type="UserOpinion">
-        <id property="opinion_id" column="opinion_id"/>
+        <id property="opinion_id" column="uoopinion_id"/>
         <result property="user_id" column="user_id"/>
         <result property="opinion" column="opinion"/>
         <result property="picture" column="picture"/>
         <result property="star" column="star"/>
         <result property="pictureUrl" column="pictureUrl"/>
+        <association property="opinionCount" javaType="OpinionCount">
+            <id property="opinion_id" column="ocopinion_id"/>
+            <result property="count" column="count"/>
+        </association>
     </resultMap>
 
     <select id="find" resultMap="userOpinionMap">
-        select *
-        from user_opinion
-        where user_id=#{user_id}
+        select uo.opinion_id as uoopinion_id,user_id,opinion,picture,star,pictureUrl,
+        oc.opinion_id as ocopinion_id,oc.count
+        from user_opinion uo,opinion_count oc
+        where uo.opinion_id = oc.opinion_id and user_id = #{user_id}
     </select>
 
     <insert id="insert" parameterType="UserOpinion">
@@ -24,7 +29,9 @@
     </insert>
 
     <delete id="deleteById" flushCache="true">
-        delete from user_opinion where opinion_id=#{opinion_id}
+        delete uo,oc
+        from user_opinion uo,opinion_count oc
+        where uo.opinion_id=oc.opinion_id and uo.opinion_id=#{opinion_id}
     </delete>
 
     <update id="update" parameterType="UserOpinion">

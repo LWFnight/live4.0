@@ -6,16 +6,18 @@ public class UserPersonalInfo {
     private Integer age;
     private String job;
     private String hobby;
+    private String nick_name;
 
     public UserPersonalInfo() {
     }
 
-    public UserPersonalInfo(Integer user_id, String head_portrait, Integer age, String job, String hobby) {
+    public UserPersonalInfo(Integer user_id, String head_portrait, Integer age, String job, String hobby, String nick_name) {
         this.user_id = user_id;
         this.head_portrait = head_portrait;
         this.age = age;
         this.job = job;
         this.hobby = hobby;
+        this.nick_name = nick_name;
     }
 
     public Integer getUser_id() {
@@ -56,5 +58,13 @@ public class UserPersonalInfo {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+    public String getNick_name() {
+        return nick_name;
+    }
+
+    public void setNick_name(String nick_name) {
+        this.nick_name = nick_name;
     }
 }

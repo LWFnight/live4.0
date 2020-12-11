@@ -43,7 +43,7 @@
         from user u,role r
         where u.role_id = r.role_id
         <if test="user_id !=null">and user_id=#{user_id}</if>
-        <if test="name !=null and name !=''">and u.name=#{name}</if>
+        <if test="name !=null and name !=''">and u.name like concat('%',#{name},'%')</if>
         <if test="gender !=null and gender !=''">and gender=#{gender}</if>
         <if test="email !=null and email !=''">and email=#{email}</if>
         <if test="phone !=null and phone !=''">and phone=#{phone}</if>
@@ -52,7 +52,7 @@
     <select id="findUserPersonalInfo" resultMap="userPersonalInfoMap">
         select u.user_id as uuser_id,u.name as userName,gender,email,password,u.role_id as urole_id,u.phone,
         r.role_id as rrole_id,r.name as roleName,
-        up.user_id as upuser_id,up.head_portrait,up.age,up.job,up.hobby
+        up.user_id as upuser_id,up.head_portrait,up.age,up.job,up.hobby,up.nick_name
         from user u,role r,personal_information up
         where u.user_id=#{user_id}
         and u.user_id = up.user_id
@@ -65,7 +65,9 @@
     </insert>
 
     <delete id="deleteUserByUserId" flushCache="true">
-        delete from user where user_id=#{user_id}
+        delete u,pi
+        from user u,personal_information pi
+        where u.user_id=#{user_id} and u.user_id=pi.user_id
     </delete>
 
     <update id="updateUser" parameterType="User">

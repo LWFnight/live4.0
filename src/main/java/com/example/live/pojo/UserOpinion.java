@@ -8,6 +8,8 @@ public class UserOpinion {
     private Integer star;
     private String pictureUrl;
 
+    private OpinionCount opinionCount;
+
     public UserOpinion() {
     }
 
@@ -72,7 +74,15 @@ public class UserOpinion {
         return pictureUrl;
     }
 
-    public void setPictureName(String pictureUrl) {
+    public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public OpinionCount getOpinionCount() {
+        return opinionCount;
+    }
+
+    public void setOpinionCount(OpinionCount opinionCount) {
+        this.opinionCount = opinionCount;
     }
 }

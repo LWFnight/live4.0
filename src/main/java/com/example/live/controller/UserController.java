@@ -35,7 +35,7 @@ public class UserController {
 //        System.out.println(userdto.getUser_id()+"\t"+userdto.getEmail()+"\t"+userdto.getPhone()+"\t"+userdto.getPassword());
         users = userService.findUsers(userdto);
         if (users.size()!=0 && users.get(0).getPassword().equals(userdto.getPassword())){
-            System.out.println(users.get(0).getUser_id());
+//            System.out.println(users.get(0).getUser_id());
             model.addAttribute("userLoginInfo",users.get(0));
             return "hello";
         }
@@ -45,6 +45,7 @@ public class UserController {
     @RequestMapping(value = "findUsers",method = RequestMethod.GET)
     public String findUsers(User userdto,Model model){
         List<User> users = new ArrayList<>();
+        userdto.setName("U");
         users = userService.findUsers(userdto);
         model.addAttribute("users",users);
         for (User user : users) {
@@ -72,7 +73,7 @@ public class UserController {
 
     @RequestMapping(value = "deleteUserByUserId",method = RequestMethod.GET)
     public String deleteUserByUserId(User userdto){
-        userService.deleteUserByUserId(3);
+        userService.deleteUserByUserId(10);
         return "redirect:/findUsers";
     }
 

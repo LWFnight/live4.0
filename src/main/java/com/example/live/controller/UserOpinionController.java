@@ -41,11 +41,11 @@ public class UserOpinionController {
         String imgData = img.getImageBinary(uploadFile.toString());
         //将构造对象存储数据，并持久化
         Long time = System.currentTimeMillis();
-        String pictureName = "D:\\live\\imgs\\"+time.toString()+".jpg";
+        String pictureUrl = "D:\\live\\imgs\\UserOpinion\\"+time.toString()+".jpg";
         User user = (User) session.getAttribute("userLoginInfo");
         userOpinion.setUser_id(user.getUser_id());
-        userOpinion.setPicture(img.getImageBinary(uploadFile.toString()));
-        userOpinion.setPictureName(pictureName);
+        userOpinion.setPicture(imgData);
+        userOpinion.setPictureUrl(pictureUrl);
 //        System.out.println(pictureName);
         userOpinionService.insert(userOpinion);
         return "login";
@@ -72,7 +72,7 @@ public class UserOpinionController {
 
     @RequestMapping(value = "deleteUserOpinion",method = RequestMethod.GET)
     public String deleteUserOpinion(Integer opinion_id){
-        opinion_id = 4;
+        opinion_id = 1;
         userOpinionService.deleteById(opinion_id);
         return "login";
     }

@@ -4,42 +4,20 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script>
-        function upImgFile() {
-            var reads = new FileReader();
-            f = document.getElementById('upImg').files[0]
-
-            let img=new FormData();
-            img.append('file',f);
-
-            $.ajax({
-                url:'/test',
-                type: 'put',
-                dataType: 'json',
-                contentType:false,
-                data:img,
-                processData:false,
-                success(res){
-                    picture = res.httpUrl
-                    console.log(picture)
-                    change(picture)
-                }
-            })
-            var Url = new FormData()
-            // reads.readAsDataURL(f);
-            function change(url) {
-                document.getElementById('headImg').src = url;
-                Url.append('headPortrait',url)
-                $.ajax({
-                    url:'/test',
-                    type:'post',
-                    dataType:'json',
-                    contentType: false,
-                    processData:false,
-                    data:Url,
-                    success(res) {
-                        console.log(res)
+        function coursePptChange(){
+            var MyTest = document.getElementById("id_card_picture_f").files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(MyTest);
+            reader.onload = function(theFile) {
+                var image = new Image();
+                image.src = theFile.target.result;
+                image.onload = function(){
+                    if(this.width > 2208 || this.height >1242){
+                        $.messager.alert("系统提示信息","ppt图片的最大宽度为 2208 像素，最大高度为 1242 像素！","info");
+                        $("#pptPic").val("");
+                        return false;
                     }
-                })
+                };
             };
         }
     </script>
@@ -47,6 +25,7 @@
 <body>
 <p>hello world!</p>
 <p th:text="欢迎您，+${userLoginInfo.userRole.name}+${userLoginInfo.name}"></p>
+<a href="/send">发送验证邮件</a>
 <a href="/insertUser">新增用户</a>
 <a href="/deleteUserByUserId">删除用户</a>
 <a href="/updateUser">更新用户</a>
@@ -85,16 +64,32 @@
         <!--</tr>-->
     <!--</c:forEach>-->
 <!--</table>-->
-    <form action="/insertOpinion" method="post">
-        <table>
-            <td><input type="text" name="opinion"/></td>
-            <td>请传入图片<br>必须是jpg格式</td>
-            <td><input type="file" name="picture" style="border: 0px; font-size: 20px;"/></td>
-            <a>本地上传
-                <input type="file" id="upImg" onchange="upImgFile()" class="upImg">
-            </a>
-            <input type="submit" value="submit"/>
-        </table>
-    </form>
+    <!--<form action="/insertOpinion" method="post">-->
+        <!--<table>-->
+            <!--<td><input type="text" name="opinion"/></td>-->
+            <!--<td>请传入图片<br>必须是jpg格式</td>-->
+            <!--<td><input type="file" name="picture" style="border: 0px; font-size: 20px;"/></td>-->
+            <!--<a>本地上传-->
+                <!--<input type="file" id="upImg" onchange="upImgFile()" class="upImg">-->
+            <!--</a>-->
+            <!--<input type="submit" value="submit"/>-->
+        <!--</table>-->
+    <!--</form>-->
+<a href="/findLandlordInformation">查看房东信息</a>
+<form action="/insertLandlordInformation" method="post">
+    <table>
+        <tr><td>身份证号码:<input type="text" name="id_number"/></td></tr>
+        <tr>
+        <td>请传入身份证图片<br>必须是jpg格式</td>
+        <td>正面<input type="file" name="id_card_picture_f" style="border: 0px; font-size: 20px;" onchange="coursePptChange()"/></td>
+        <td>反面<input type="file" name="id_card_picture_r" style="border: 0px; font-size: 20px;"/></td>
+        </tr>
+        <tr>
+            <td>支付宝名字：<input type="text" name="alipay_name"/></td>
+            <td>支付宝账户：<input type="text" name="alipay_account"/></td>
+        </tr>
+        <input type="submit" value="submit"/>
+    </table>
+</form>
 </body>
 </html>
