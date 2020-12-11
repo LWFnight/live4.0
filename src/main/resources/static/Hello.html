@@ -31,7 +31,7 @@
 <!--<a href="/updateUser">更新用户</a>-->
 <!--<a href="/findUserPersonalInfo">查询用户信息</a>-->
 <!--<a href="/findUsers">查询全部用户信息</a>-->
-<!--<a href="/findOpinion">查询用户意见信息</a>-->
+<a href="/findOpinion">查询用户意见信息</a>
 <!--<a href="/deleteUserOpinion">删除用户意见信息</a>-->
 <!--<a href="/updateUserOpinion">更新用户意见信息</a>-->
 <a href="/findLandlordInformationList">查看房东列表</a>
@@ -66,17 +66,17 @@
         <!--</tr>-->
     <!--</c:forEach>-->
 <!--</table>-->
-    <!--<form action="/insertOpinion" method="post">-->
-        <!--<table>-->
-            <!--<td><input type="text" name="opinion"/></td>-->
-            <!--<td>请传入图片<br>必须是jpg格式</td>-->
-            <!--<td><input type="file" name="picture" style="border: 0px; font-size: 20px;"/></td>-->
-            <!--<a>本地上传-->
-                <!--<input type="file" id="upImg" onchange="upImgFile()" class="upImg">-->
-            <!--</a>-->
-            <!--<input type="submit" value="submit"/>-->
-        <!--</table>-->
-    <!--</form>-->
+    <form action="/insertOpinion" method="post">
+        <table>
+            <td><input type="text" name="opinion"/></td>
+            <td>请传入图片<br>必须是jpg格式</td>
+            <td><input type="file" name="picture" style="border: 0px; font-size: 20px;"/></td>
+            <a>本地上传
+                <input type="file" id="upImg" onchange="upImgFile()" class="upImg">
+            </a>
+            <input type="submit" value="submit"/>
+        </table>
+    </form>
 <a href="/findLandlordInformation">查看房东信息</a>
 <form action="/insertLandlordInformation" method="post">
     <table>

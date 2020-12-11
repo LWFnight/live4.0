@@ -41,11 +41,13 @@ public class UserOpinionController {
         String imgData = img.getImageBinary(uploadFile.toString());
         //将构造对象存储数据，并持久化
         Long time = System.currentTimeMillis();
-        String pictureUrl = "D:\\live\\imgs\\UserOpinion\\"+time.toString()+".jpg";
+        String pictureUrl = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\"+time.toString()+".jpg";
+        String pictureName = time.toString()+".jpg";
         User user = (User) session.getAttribute("userLoginInfo");
         userOpinion.setUser_id(user.getUser_id());
         userOpinion.setPicture(imgData);
         userOpinion.setPictureUrl(pictureUrl);
+        userOpinion.setPicture_name(pictureName);
 //        System.out.println(pictureName);
         userOpinionService.insert(userOpinion);
         return "login";
@@ -64,9 +66,10 @@ public class UserOpinionController {
             String savePath = userOpinion.getPictureUrl();
             System.out.println(savePath);
             img.base64StringToImage(savePath,userOpinion.getPicture());
+            userOpinion.setPath("/imgs/"+userOpinion.getPicture_name());
+            System.out.println(userOpinion.getPath());
         }
         model.addAttribute("userOpinions",userOpinions);
-        model.addAttribute("testPictureUrl",userOpinions.get(0).getPictureUrl());
         return "login";
     }
 
@@ -78,7 +81,7 @@ public class UserOpinionController {
 
     @RequestMapping(value = "updateUserOpinion",method = RequestMethod.GET)
     public String updateUserOpinion(UserOpinion userOpinionDto){
-        userOpinionDto = new UserOpinion(5,1,"update opinion","test update",5,"D:\\live\\imgs\\1607481426920.jpg");
+//        userOpinionDto = new UserOpinion(5,1,"update opinion","test update",5,"D:\\live\\imgs\\1607481426920.jpg");
         userOpinionService.update(userOpinionDto);
         return "login";
     }

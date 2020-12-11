@@ -10,6 +10,7 @@
         <result property="picture" column="picture"/>
         <result property="star" column="star"/>
         <result property="pictureUrl" column="pictureUrl"/>
+        <result property="picture_name" column="picture_name"/>
         <association property="opinionCount" javaType="OpinionCount">
             <id property="opinion_id" column="ocopinion_id"/>
             <result property="count" column="count"/>
@@ -17,15 +18,15 @@
     </resultMap>
 
     <select id="find" resultMap="userOpinionMap">
-        select uo.opinion_id as uoopinion_id,user_id,opinion,picture,star,pictureUrl,
+        select uo.opinion_id as uoopinion_id,user_id,opinion,picture,star,pictureUrl,picture_name,
         oc.opinion_id as ocopinion_id,oc.count
         from user_opinion uo,opinion_count oc
         where uo.opinion_id = oc.opinion_id and user_id = #{user_id}
     </select>
 
     <insert id="insert" parameterType="UserOpinion">
-        insert into user_opinion(user_id,opinion,picture,star,pictureUrl)
-        values(#{user_id},#{opinion},#{picture},#{star},#{pictureUrl})
+        insert into user_opinion(user_id,opinion,picture,star,pictureUrl,picture_name)
+        values(#{user_id},#{opinion},#{picture},#{star},#{pictureUrl},#{picture_name})
     </insert>
 
     <delete id="deleteById" flushCache="true">
@@ -41,6 +42,7 @@
             <if test="picture !=null and picture !=''">picture=#{picture},</if>
             <if test="star !=null and star !=''">star=#{star},</if>
             <if test="pictureUrl !=null and pictureUrl !=''">pictureUrl=#{pictureUrl},</if>
+            <if test="picture_name !=null and picture_name !=''">picture_name=#{picture_name},</if>
         </trim>
         where opinion_id=#{opinion_id} and user_id = #{user_id}
     </update>
