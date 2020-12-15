@@ -11,7 +11,7 @@ public class SendEmail {
         email.setCharset("utf-8");
         email.addTo(userEmail);//测试收件人邮箱："wo319039695@163.com"
         email.setFrom("319039695@qq.com");
-        email.setAuthentication("319039695@qq.com","olfczzbokpphcaad");
+        email.setAuthentication("319039695@qq.com","");
         email.setSubject("宜居注册验证邮件");
         email.setMsg("尊敬的用户，您此次注册的验证码为："+randomCode);
         email.send();
