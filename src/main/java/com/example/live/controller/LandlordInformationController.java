@@ -111,6 +111,7 @@ public class LandlordInformationController {
         landlordInformation.setUser_id(user.getUser_id());
         //所有普通用户更新房东信息都要重新审批
         landlordInformation.setStatus("待审批");
+
         landlordInformationService.update(landlordInformation);
         User user1 = new User();
         user1.setUser_id(landlordInformation.getUser_id());

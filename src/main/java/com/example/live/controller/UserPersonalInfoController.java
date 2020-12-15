@@ -16,6 +16,14 @@ public class UserPersonalInfoController {
     @Autowired
     private UserPersonalInfoService userPersonalInfoService;
 
+    @RequestMapping(value = "findUserPersonalInfo",method = RequestMethod.POST)
+    public String findUserPersonalInfo(UserPersonalInfo userPersonalInfo,HttpSession session){
+        User user = (User) session.getAttribute("userLoginInfo");
+        userPersonalInfo.setUser_id(user.getUser_id());
+        userPersonalInfoService.find(userPersonalInfo);
+        return "login";
+    }
+
     @RequestMapping(value = "insertUserPersonalInfo",method = RequestMethod.POST)
     public String insertUserPersonalInfo(UserPersonalInfo userPersonalInfo,HttpSession session){
         User user = (User) session.getAttribute("userLoginInfo");

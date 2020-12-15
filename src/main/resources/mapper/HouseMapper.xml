@@ -25,6 +25,7 @@
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
+        <result property="picture_name" column="picture_name"/>
     </resultMap>
 
     <resultMap id="houseDetailMap" type="House">
@@ -49,6 +50,7 @@
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
+        <result property="picture_name" column="picture_name"/>
         <association property="allocation" javaType="Allocation">
             <id property="house_id" column="ahouse_id"/>
             <result property="tv" column="tv"/>
@@ -110,7 +112,7 @@
     </resultMap>
 
     <select id="find" resultMap="houseMap">
-        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name
         from house h
         <where>
             <if test="house_id != null">h.house_id = #{house_id}</if>
@@ -136,7 +138,7 @@
     </select>
 
     <select id="findHouseDetail" resultMap="houseDetailMap">
-        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name,
         f.house_id as fhouse_id,independent_bathroom,independent_balcony,smart_sock,self_decorating,first_rent,fully_furnished,nearby_subway,any_time_to_see,check_in_at_once,
         a.house_id as ahouse_id,tv,refrigerator,washing_machine,air_condition,wifi,beds,water_heater,chest,desk,cooking
         from house h,feature f,allocation a
@@ -174,8 +176,8 @@
     </select>
 
     <insert id="insert" parameterType="House" useGeneratedKeys="true" keyProperty="house_id" keyColumn="house_id">
-        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl)
-        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{acreage},#{layout},#{introduction},#{status},#{picture},#{pictureUrl})
+        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name)
+        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{acreage},#{layout},#{introduction},#{status},#{picture},#{pictureUrl},#{picture_name})
     </insert>
 
     <delete id="deleteById" flushCache="true">

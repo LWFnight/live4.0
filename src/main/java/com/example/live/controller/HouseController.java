@@ -48,6 +48,7 @@ public class HouseController {
             house.setPicture(imgData);
             String pictureUrl = savePath+house.getHouse_id().toString()+".jpg";
             house.setPictureUrl(pictureUrl);
+            house.setPicture_name(house.getHouse_id().toString()+".jpg");
         }
         houseService.insert(house);
         Allocation allocation = new Allocation(house.getHouse_id(),0,0,0,0,0,0,0,0,0,0);

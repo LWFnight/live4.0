@@ -22,6 +22,7 @@ public class House {
     private String status;
     private String picture;
     private String pictureUrl;
+    private String picture_name;
     private String time;
 
     private LandlordHouseRelation landlordHouseRelation;
@@ -33,7 +34,8 @@ public class House {
     public House() {
     }
 
-    public House(String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, String acreage, String layout, String introduction, String status, String picture, String pictureUrl, LandlordHouseRelation landlordHouseRelation, Allocation allocation) {
+    public House(Integer house_id, String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, String acreage, String layout, String introduction, String status, String picture, String pictureUrl, String picture_name, String time) {
+        this.house_id = house_id;
         this.title = title;
         this.city = city;
         this.region = region;
@@ -54,8 +56,8 @@ public class House {
         this.status = status;
         this.picture = picture;
         this.pictureUrl = pictureUrl;
-        this.landlordHouseRelation = landlordHouseRelation;
-        this.allocation = allocation;
+        this.picture_name = picture_name;
+        this.time = time;
     }
 
     public Integer getHouse_id() {
@@ -256,5 +258,13 @@ public class House {
 
     public void setFeature(Feature feature) {
         this.feature = feature;
+    }
+
+    public String getPicture_name() {
+        return picture_name;
+    }
+
+    public void setPicture_name(String picture_name) {
+        this.picture_name = picture_name;
     }
 }

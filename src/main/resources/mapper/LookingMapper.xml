@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.LookingMapper">
+
+    <resultMap id="lookMap" type="Looking">
+        <id property="looking_id" column="looking_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="house_id" column="house_id"/>
+        <result property="date" column="date"/>
+        <result property="site" column="site"/>
+        <result property="agent_id" column="agent_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="find" resultMap="lookMap">
+        select *
+        from looking
+        <where>
+            <if test="looking_id != null">and looking_id = #{looking_id}</if>
+            <if test="user_id != null">and user_id = #{user_id}</if>
+            <if test="house_id != null">and house_id = #{house_id}</if>
+            <if test="date != null and date != ''">and date = #{date}</if>
+            <if test="site != null and site != ''">and site = #{site}</if>
+            <if test="agent_id != null">and agent_id = #{agent_id}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="findHistoryLooking" resultMap="lookMap">
+        select *
+        from looking
+        where status='2'
+        <if test="user_id != null">and user_id = #{user_id}</if>
+        <if test="house_id != null">and house_id = #{house_id}</if>
+        <if test="date != null and date != ''">and date = #{date}</if>
+        <if test="site != null and site != ''">and site = #{site}</if>
+        <if test="agent_id != null">and agent_id = #{agent_id}</if>
+        <if test="status != null">and status = #{status}</if>
+    </select>
+
+    <insert id="insert" parameterType="Looking">
+        insert into (user_id,house_id,date,site,agent_id,status)
+        values(#{user_id},#{house_id},#{date},#{site},#{agent_id},#{status})
+    </insert>
+
+    <delete id="deleteById" flushCache="true">
+        delete from where looking_id=#{looking_id}
+    </delete>
+
+    <update id="update" parameterType="Looking">
+        update
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="agent_id !=null">agent_id=#{agent_id},</if>
+            <if test="status !=null">status=#{status},</if>
+        </trim>
+        where looking_id=#{looking_id}
+    </update>
+
+</mapper>
