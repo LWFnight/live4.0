@@ -13,12 +13,7 @@ public class OpinionCountController {
     @Autowired
     private OpinionCountService opinionCountService;
 
-    @RequestMapping(value = "insertOpinionCount",method = RequestMethod.POST)
-    public String insertOpinionCount(OpinionCount opinionCount){
-        opinionCountService.insert(opinionCount);
-        return "login";
-    }
-
+    //用Redis实现点赞
     @RequestMapping(value = "updateOpinionCount",method = RequestMethod.POST)
     public String updateOpinionCount(OpinionCount opinionCount){
         opinionCountService.update(opinionCount);
