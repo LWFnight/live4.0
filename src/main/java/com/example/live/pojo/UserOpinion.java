@@ -9,21 +9,26 @@ public class UserOpinion {
     private String pictureUrl;
     private String picture_name;
     private String path;
+    private Integer house_id;
 
     private OpinionCount opinionCount;
+
+    private House house;
+
+    private User user;
 
     public UserOpinion() {
     }
 
-    public UserOpinion(Integer opinion_id, Integer user_id, String opinion, String picture, Integer star, String pictureUrl, String picture_name, OpinionCount opinionCount) {
-        this.opinion_id = opinion_id;
+    public UserOpinion(Integer user_id, String opinion, String picture, Integer star, String pictureUrl, String picture_name, String path, Integer house_id) {
         this.user_id = user_id;
         this.opinion = opinion;
         this.picture = picture;
         this.star = star;
         this.pictureUrl = pictureUrl;
         this.picture_name = picture_name;
-        this.opinionCount = opinionCount;
+        this.path = path;
+        this.house_id = house_id;
     }
 
     public UserOpinion(Integer user_id, String opinion, String picture, Integer star, String pictureUrl) {
@@ -104,5 +109,29 @@ public class UserOpinion {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Integer getHouse_id() {
+        return house_id;
+    }
+
+    public void setHouse_id(Integer house_id) {
+        this.house_id = house_id;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -28,7 +28,7 @@ public class LandlordInformationController {
     @Autowired
     private UserService userService;
 
-    private String savePath = "D:\\live\\imgs\\LandlordInfomation";
+    private String savePath = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\";
 
     @RequestMapping(value = "findLandlordInformationList",method = RequestMethod.GET)
     public String findLandlordInformationList(LandlordInformation landlordInformation){
@@ -40,6 +40,7 @@ public class LandlordInformationController {
         return "login";
     }
 
+    @RequestMapping(value = "findLandlordInfoDetail",method = RequestMethod.GET)
     public String findLandlordInfoDetail(LandlordInformation landlordInformation,Model model){
         List<LandlordInformation> landlordInformations = new ArrayList<>();
         landlordInformations = landlordInformationService.find(landlordInformation);
@@ -48,9 +49,10 @@ public class LandlordInformationController {
         for (LandlordInformation information : landlordInformations) {
             img.base64StringToImage(information.getId_card_picture_f_url(),information.getId_card_picture_f());
             img.base64StringToImage(information.getId_card_picture_r_url(),information.getId_card_picture_r());
-            model.addAttribute("landlordInfoDetail",information);
-            model.addAttribute("id_card_picture_f_url",information.getId_card_picture_f_url());
-            model.addAttribute("id_card_picture_r_url",information.getId_card_picture_r_url());
+            information.setId_card_picture_f_path("/imgs/"+information.getId_card_picture_f_name());
+            information.setId_card_picture_r_path("/imgs/"+information.getId_card_picture_r_name());
+            information.setId_card_picture_f(information.getId_card_picture_f_url());
+            information.setId_card_picture_r(information.getId_card_picture_r_url());
         }
         return "login";
     }
@@ -69,8 +71,10 @@ public class LandlordInformationController {
         File uploadidPicturer=new File(file+File.separator+idPicturerName);
         String idPicturefData = img.getImageBinary(uploadidPicturef.toString());//身份证正面照片图片数据
         String idPicturefDataUrl = savePath+"\\"+landlordInformation.getId_number().toString()+"f.jpg";//身份证正面照片图片数据保存路径
+        String idPicturefSaveName = landlordInformation.getId_number().toString()+"f.jpg";
         String idPicturerData = img.getImageBinary(uploadidPicturer.toString());//身份证反面照片图片数据
         String idPicturerDataUrl = savePath+"\\"+landlordInformation.getId_number().toString()+"r.jpg";//身份证反面照片图片数据保存路径
+        String idPicturerSaveName = landlordInformation.getId_number().toString()+"r.jpg";
         //只有没有成为房东的才可以注册成为房东,一个身份证只能绑定一个房东
         List<LandlordInformation> landlordInformations = new ArrayList<>();
         landlordInformations = landlordInformationService.find(landlordInformation);
@@ -80,6 +84,8 @@ public class LandlordInformationController {
             landlordInformation.setStatus("待审批");
             landlordInformation.setId_card_picture_f_url(idPicturefDataUrl);
             landlordInformation.setId_card_picture_r_url(idPicturerDataUrl);
+            landlordInformation.setId_card_picture_f_name(idPicturefSaveName);
+            landlordInformation.setId_card_picture_r_name(idPicturerSaveName);
             landlordInformationService.insert(landlordInformation);
             return "login";//返回成功
         }
@@ -107,6 +113,7 @@ public class LandlordInformationController {
         landlordInformation.setStatus("待审批");
         landlordInformationService.update(landlordInformation);
         User user1 = new User();
+        user1.setUser_id(landlordInformation.getUser_id());
         user1.setRole_id(4);
         userService.updateUser(user1);
         return "login";
@@ -116,10 +123,12 @@ public class LandlordInformationController {
     public String  adminUpdateLandlordInfomation(LandlordInformation landlordInformation){
         User user = new User();
         if (landlordInformation.getStatus() =="审批通过"){
+            user.setUser_id(landlordInformation.getUser_id());
             user.setRole_id(5);
             userService.updateUser(user);
             landlordInformationService.update(landlordInformation);
         }else {
+            user.setUser_id(landlordInformation.getUser_id());
             user.setRole_id(4);
             userService.updateUser(user);
             landlordInformationService.update(landlordInformation);

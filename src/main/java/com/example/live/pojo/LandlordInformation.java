@@ -10,13 +10,17 @@ public class LandlordInformation {
     private String status;//status：待审批，审批通过，审批不通过
     private String id_card_picture_f_url;
     private String id_card_picture_r_url;
+    private String id_card_picture_f_name;
+    private String id_card_picture_r_name;
+    private String id_card_picture_f_path;
+    private String id_card_picture_r_path;
 
     private User user;
 
     public LandlordInformation() {
     }
 
-    public LandlordInformation(Integer user_id, String id_number, String id_card_picture_f, String id_card_picture_r, String alipay_name, String alipay_account, String status, String id_card_picture_f_url, String id_card_picture_r_url) {
+    public LandlordInformation(Integer user_id, String id_number, String id_card_picture_f, String id_card_picture_r, String alipay_name, String alipay_account, String status, String id_card_picture_f_url, String id_card_picture_r_url, String id_card_picture_f_name, String id_card_picture_r_name) {
         this.user_id = user_id;
         this.id_number = id_number;
         this.id_card_picture_f = id_card_picture_f;
@@ -26,6 +30,8 @@ public class LandlordInformation {
         this.status = status;
         this.id_card_picture_f_url = id_card_picture_f_url;
         this.id_card_picture_r_url = id_card_picture_r_url;
+        this.id_card_picture_f_name = id_card_picture_f_name;
+        this.id_card_picture_r_name = id_card_picture_r_name;
     }
 
     public Integer getUser_id() {
@@ -106,5 +112,37 @@ public class LandlordInformation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getId_card_picture_f_name() {
+        return id_card_picture_f_name;
+    }
+
+    public void setId_card_picture_f_name(String id_card_picture_f_name) {
+        this.id_card_picture_f_name = id_card_picture_f_name;
+    }
+
+    public String getId_card_picture_r_name() {
+        return id_card_picture_r_name;
+    }
+
+    public void setId_card_picture_r_name(String id_card_picture_r_name) {
+        this.id_card_picture_r_name = id_card_picture_r_name;
+    }
+
+    public String getId_card_picture_f_path() {
+        return id_card_picture_f_path;
+    }
+
+    public void setId_card_picture_f_path(String id_card_picture_f_path) {
+        this.id_card_picture_f_path = id_card_picture_f_path;
+    }
+
+    public String getId_card_picture_r_path() {
+        return id_card_picture_r_path;
+    }
+
+    public void setId_card_picture_r_path(String id_card_picture_r_path) {
+        this.id_card_picture_r_path = id_card_picture_r_path;
     }
 }

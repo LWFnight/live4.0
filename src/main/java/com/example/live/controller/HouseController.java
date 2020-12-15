@@ -1,8 +1,10 @@
 package com.example.live.controller;
 
-import com.example.live.pojo.House;
-import com.example.live.pojo.User;
+import com.example.live.pojo.*;
+import com.example.live.service.AllocationService;
+import com.example.live.service.FeatureService;
 import com.example.live.service.HouseService;
+import com.example.live.service.LandlordHouseRelationService;
 import com.example.live.utils.ImgToJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,20 +25,38 @@ public class HouseController {
     @Autowired
     private HouseService houseService;
 
-    private String savePath = "D:\\live\\imgs\\House";
+    @Autowired
+    private AllocationService allocationService;
+
+    @Autowired
+    private FeatureService featureService;
+
+    @Autowired
+    private LandlordHouseRelationService landlordHouseRelationService;
+
+    private String savePath = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\";
 
     @RequestMapping(value = "insertHouse",method = RequestMethod.POST)
-    public String insertHouse(House house){
-        ImgToJson img = new ImgToJson();
-        String uploadPath = "D:\\live\\pictures\\";
-        File file = new File(uploadPath);
-        String fileName = house.getPicture();
-        File uploadFile=new File(file+File.separator+fileName);
-        String imgData = img.getImageBinary(uploadFile.toString());
-        house.setPicture(imgData);
-        String pictureUrl = savePath+"\\"+house.getHouse_id().toString()+".jpg";
-        house.setPictureUrl(pictureUrl);
+    public String insertHouse(House house,HttpSession session){
+        if (house.getPicture() !=null){
+            ImgToJson img = new ImgToJson();
+            String uploadPath = "D:\\live\\pictures\\";
+            File file = new File(uploadPath);
+            String fileName = house.getPicture();
+            File uploadFile=new File(file+File.separator+fileName);
+            String imgData = img.getImageBinary(uploadFile.toString());
+            house.setPicture(imgData);
+            String pictureUrl = savePath+house.getHouse_id().toString()+".jpg";
+            house.setPictureUrl(pictureUrl);
+        }
         houseService.insert(house);
+        Allocation allocation = new Allocation(house.getHouse_id(),0,0,0,0,0,0,0,0,0,0);
+        allocationService.insert(allocation);
+        Feature feature = new Feature(house.getHouse_id(),0,0,0,0,0,0,0,0,0);
+        featureService.insert(feature);
+        User user = (User) session.getAttribute("userLoginInfo");
+        LandlordHouseRelation landlordHouseRelation = new LandlordHouseRelation(user.getUser_id(),house.getHouse_id());
+        landlordHouseRelationService.insert(landlordHouseRelation);
         return "login";
     }
 
@@ -46,12 +66,30 @@ public class HouseController {
         houses = houseService.find(house);
         ImgToJson img = new ImgToJson();
         for (House house1 : houses) {
-            String savePath = house1.getPictureUrl();
-            String imgData = house1.getPicture();
-            img.base64StringToImage(savePath,imgData);
+            if (house1.getPicture()!=null){
+                String savePath = house1.getPictureUrl();
+                String imgData = house1.getPicture();
+                img.base64StringToImage(savePath,imgData);
+                house1.setPicture(house1.getPictureUrl());
+            }
         }
-        //返回集合，遍历集合获取图片路径
-        return "login";
+        return "login";//返回集合
+    }
+
+    @RequestMapping(value = "findHousesDetail",method = RequestMethod.GET)
+    public String findHousesDetail(House house){
+        List<House> houses = new ArrayList<>();
+        houses = houseService.findHouseDetail(house);
+        ImgToJson img = new ImgToJson();
+        for (House house1 : houses) {
+            if (house1.getPicture()!=null){
+                String savePath = house1.getPictureUrl();
+                String imgData = house1.getPicture();
+                img.base64StringToImage(savePath,imgData);
+                house1.setPicture(house1.getPictureUrl());
+            }
+        }
+        return "login";//返回集合
     }
 
     @RequestMapping(value = "findHouseByUserId",method = RequestMethod.GET)
@@ -60,30 +98,32 @@ public class HouseController {
         Integer user_id = user.getUser_id();
         List<House> houses = new ArrayList<>();
         houses = houseService.findHouseByUserId(user_id);
-        System.out.println(user_id);
-        Integer i = 512;
         for (House house : houses) {
             System.out.println(house.getHouse_id());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String time = simpleDateFormat.format(house.getLandlordHouseRelation().getPublish_time());
+            house.setTime(time);
         }
         return "login";
     }
 
+    @RequestMapping(value = "deleteHouseById",method = RequestMethod.GET)
     public String deleteHouseById(Integer house_id){
         houseService.deleteById(house_id);
         return "login";
     }
 
+    @RequestMapping(value = "updateHouse",method = RequestMethod.GET)
     public String updateHouse(House house){
+        if (house.getPicture() !=null){
+            ImgToJson img = new ImgToJson();
+            String uploadPath = house.getPicture();
+            String imgData = img.getImageBinary(uploadPath);
+            house.setPicture(imgData);
+            String pictureUrl = savePath+house.getHouse_id().toString()+".jpg";
+            house.setPictureUrl(pictureUrl);
+        }
         houseService.update(house);
-        return "login";
-    }
-
-    @RequestMapping(value = "test",method = RequestMethod.GET)
-    public String insert(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = new Date();
-        simpleDateFormat.format(new Date());
-        System.out.println(simpleDateFormat.format(now));
         return "login";
     }
 }

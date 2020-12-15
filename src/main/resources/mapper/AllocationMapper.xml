@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.AllocationMapper">
+
+    <resultMap id="allocationMap" type="Allocation">
+        <id property="house_id" column="house_id"/>
+        <result property="tv" column="tv"/>
+        <result property="refrigerator" column="refrigerator"/>
+        <result property="washing_machine" column="washing_machine"/>
+        <result property="air_condition" column="air_condition"/>
+        <result property="wifi" column="wifi"/>
+        <result property="beds" column="beds"/>
+        <result property="water_heater" column="water_heater"/>
+        <result property="chest" column="chest"/>
+        <result property="desk" column="desk"/>
+        <result property="cooking" column="cooking"/>
+    </resultMap>
+
+    <select id="find" resultMap="allocationMap">
+        select *
+        from allocation
+        where house_id=#{house_id}
+    </select>
+
+    <insert id="insert" parameterType="Allocation">
+        insert into allocation(house_id,tv,refrigerator,washing_machine,air_condition,wifi,beds,water_heater,chest,desk,cooking)
+        values(#{house_id},#{tv},#{refrigerator},#{washing_machine},#{air_condition},#{wifi},#{beds},#{water_heater},#{chest},#{desk},#{cooking})
+    </insert>
+
+    <delete id="deleteById" flushCache="true">
+        delete from allocation where house_id=#{house_id}
+    </delete>
+
+    <update id="update" parameterType="Allocation">
+        update allocation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tv !=null">tv=#{tv},</if>
+            <if test="refrigerator !=null">refrigerator=#{refrigerator},</if>
+            <if test="washing_machine !=null">washing_machine=#{washing_machine},</if>
+            <if test="air_condition !=null">air_condition=#{air_condition},</if>
+            <if test="wifi !=null">wifi=#{wifi},</if>
+            <if test="beds !=null">beds=#{beds},</if>
+            <if test="water_heater !=null">water_heater=#{water_heater},</if>
+            <if test="chest !=null">chest=#{chest},</if>
+            <if test="desk !=null">desk=#{desk},</if>
+            <if test="cooking !=null">cooking=#{cooking},</if>
+        </trim>
+        where house_id=#{house_id}
+    </update>
+
+</mapper>

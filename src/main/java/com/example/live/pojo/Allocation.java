@@ -1,7 +1,7 @@
 package com.example.live.pojo;
 
 public class Allocation {
-    private Integer id;
+    private Integer house_id;
     //以下属性0表示没有，1表示有
     private Integer tv;
     private Integer refrigerator;
@@ -17,8 +17,8 @@ public class Allocation {
     public Allocation() {
     }
 
-    public Allocation(Integer id, Integer tv, Integer refrigerator, Integer washing_machine, Integer air_condition, Integer wifi, Integer beds, Integer water_heater, Integer chest, Integer desk, Integer cooking) {
-        this.id = id;
+    public Allocation(Integer house_id, Integer tv, Integer refrigerator, Integer washing_machine, Integer air_condition, Integer wifi, Integer beds, Integer water_heater, Integer chest, Integer desk, Integer cooking) {
+        this.house_id = house_id;
         this.tv = tv;
         this.refrigerator = refrigerator;
         this.washing_machine = washing_machine;
@@ -31,12 +31,25 @@ public class Allocation {
         this.cooking = cooking;
     }
 
-    public Integer getId() {
-        return id;
+    public Allocation(Integer tv, Integer refrigerator, Integer washing_machine, Integer air_condition, Integer wifi, Integer beds, Integer water_heater, Integer chest, Integer desk, Integer cooking) {
+        this.tv = tv;
+        this.refrigerator = refrigerator;
+        this.washing_machine = washing_machine;
+        this.air_condition = air_condition;
+        this.wifi = wifi;
+        this.beds = beds;
+        this.water_heater = water_heater;
+        this.chest = chest;
+        this.desk = desk;
+        this.cooking = cooking;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Integer getHouse_id() {
+        return house_id;
+    }
+
+    public void setHouse_id(Integer house_id) {
+        this.house_id = house_id;
     }
 
     public Integer getTv() {

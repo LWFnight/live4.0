@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.FeatureMapper">
+
+    <resultMap id="featureMap" type="Feature">
+        <id property="house_id" column="house_id"/>
+        <result property="independent_bathroom" column="independent_bathroom"/>
+        <result property="independent_balcony" column="independent_balcony"/>
+        <result property="smart_sock" column="smart_sock"/>
+        <result property="self_decorating" column="self_decorating"/>
+        <result property="first_rent" column="first_rent"/>
+        <result property="fully_furnished" column="fully_furnished"/>
+        <result property="nearby_subway" column="nearby_subway"/>
+        <result property="any_time_to_see" column="any_time_to_see"/>
+        <result property="check_in_at_once" column="check_in_at_once"/>
+    </resultMap>
+
+    <select id="find" resultMap="featureMap">
+        select *
+        from feature
+        where house_id=#{house_id}
+    </select>
+
+    <insert id="insert" parameterType="Feature">
+        insert into feature(house_id,independent_bathroom,independent_balcony,smart_sock,self_decorating,first_rent,fully_furnished,nearby_subway,any_time_to_see,check_in_at_once)
+        values(#{house_id},#{independent_bathroom},#{independent_balcony},#{smart_sock},#{self_decorating},#{first_rent},#{fully_furnished},#{nearby_subway},#{any_time_to_see},#{check_in_at_once})
+    </insert>
+
+    <delete id="deleteById" flushCache="true">
+        delete from feature where house_id=#{house_id}
+    </delete>
+
+    <update id="update" parameterType="Feature">
+        update feature
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="independent_bathroom !=null">independent_bathroom=#{independent_bathroom},</if>
+            <if test="independent_balcony !=null">independent_balcony=#{independent_balcony},</if>
+            <if test="smart_sock !=null">smart_sock=#{smart_sock},</if>
+            <if test="self_decorating !=null">self_decorating=#{self_decorating},</if>
+            <if test="first_rent !=null">first_rent=#{first_rent},</if>
+            <if test="fully_furnished !=null">fully_furnished=#{fully_furnished},</if>
+            <if test="nearby_subway !=null">nearby_subway=#{nearby_subway},</if>
+            <if test="any_time_to_see !=null">any_time_to_see=#{any_time_to_see},</if>
+            <if test="check_in_at_once !=null">check_in_at_once=#{check_in_at_once},</if>
+        </trim>
+        where house_id=#{house_id}
+    </update>
+
+</mapper>

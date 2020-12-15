@@ -19,14 +19,61 @@
         <result property="carport" column="carport"/>
         <result property="energy_charge" column="energy_charge"/>
         <result property="water_charge" column="water_charge"/>
-        <result property="feature_id" column="feature_id"/>
         <result property="acreage" column="acreage"/>
         <result property="layout" column="layout"/>
-        <result property="allocation_id" column="allocation_id"/>
         <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
+    </resultMap>
+
+    <resultMap id="houseDetailMap" type="House">
+        <id property="house_id" column="hhouse_id"/>
+        <result property="title" column="title"/>
+        <result property="city" column="city"/>
+        <result property="region" column="region"/>
+        <result property="address" column="address"/>
+        <result property="house_type" column="house_type"/>
+        <result property="rent" column="rent"/>
+        <result property="rent_way" column="rent_way"/>
+        <result property="rent_type" column="rent_type"/>
+        <result property="number_of_people" column="number_of_people"/>
+        <result property="elevator" column="elevator"/>
+        <result property="toward" column="toward"/>
+        <result property="carport" column="carport"/>
+        <result property="energy_charge" column="energy_charge"/>
+        <result property="water_charge" column="water_charge"/>
+        <result property="acreage" column="acreage"/>
+        <result property="layout" column="layout"/>
+        <result property="introduction" column="introduction"/>
+        <result property="status" column="status"/>
+        <result property="picture" column="picture"/>
+        <result property="pictureUrl" column="pictureUrl"/>
+        <association property="allocation" javaType="Allocation">
+            <id property="house_id" column="ahouse_id"/>
+            <result property="tv" column="tv"/>
+            <result property="refrigerator" column="refrigerator"/>
+            <result property="washing_machine" column="washing_machine"/>
+            <result property="air_condition" column="air_condition"/>
+            <result property="wifi" column="wifi"/>
+            <result property="beds" column="beds"/>
+            <result property="water_heater" column="water_heater"/>
+            <result property="chest" column="chest"/>
+            <result property="desk" column="desk"/>
+            <result property="cooking" column="cooking"/>
+        </association>
+        <association property="feature" javaType="Feature">
+            <id property="house_id" column="fhouse_id"/>
+            <result property="independent_bathroom" column="independent_bathroom"/>
+            <result property="independent_balcony" column="independent_balcony"/>
+            <result property="smart_sock" column="smart_sock"/>
+            <result property="self_decorating" column="self_decorating"/>
+            <result property="first_rent" column="first_rent"/>
+            <result property="fully_furnished" column="fully_furnished"/>
+            <result property="nearby_subway" column="nearby_subway"/>
+            <result property="any_time_to_see" column="any_time_to_see"/>
+            <result property="check_in_at_once" column="check_in_at_once"/>
+        </association>
     </resultMap>
 
     <resultMap id="houseByUserIdMap" type="House">
@@ -53,6 +100,7 @@
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
+        <result property="picture_name" column="picture_name"/>
         <association property="landlordHouseRelation" javaType="LandlordHouseRelation">
             <id property="relation_id" column="relation_id"/>
             <result property="user_id" column="user_id"/>
@@ -62,11 +110,11 @@
     </resultMap>
 
     <select id="find" resultMap="houseMap">
-        select *
-        from house
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,
+        from house h
         <where>
-            <if test="house_id != null">house_id = #{house_id}</if>
-            <if test="title != null and title !=''">and title = #{title}</if>
+            <if test="house_id != null">h.house_id = #{house_id}</if>
+            <if test="title != null and title !=''">and title like concat('%',#{title},'%')</if>
             <if test="city != null and city !=''">and city = #{city}</if>
             <if test="region != null and region !=''">and region = #{region}</if>
             <if test="address != null and address !=''">and address = #{address}</if>
@@ -80,33 +128,60 @@
             <if test="carport != null and carport !=''">and carport = #{carport}</if>
             <if test="energy_charge != null and energy_charge !=''">and energy_charge = #{energy_charge}</if>
             <if test="water_charge != null and water_charge !=''">and water_charge = #{water_charge}</if>
-            <if test="feature_id != null">and feature_id = #{feature_id}</if>
             <if test="acreage != null and acreage !=''">and acreage = #{acreage}</if>
             <if test="layout != null and layout !=''">and layout = #{layout}</if>
-            <if test="allocation_id != null">and allocation_id = #{allocation_id}</if>
             <if test="introduction != null and introduction !=''">and introduction = #{introduction}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
-            <if test="picture != null and picture !=''">and picture = #{picture}</if>
-            <if test="pictureUrl != null and pictureUrl !=''">and pictureUrl = #{pictureUrl}</if>
+        </where>
+    </select>
+
+    <select id="findHouseDetail" resultMap="houseDetailMap">
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,
+        f.house_id as fhouse_id,independent_bathroom,independent_balcony,smart_sock,self_decorating,first_rent,fully_furnished,nearby_subway,any_time_to_see,check_in_at_once,
+        a.house_id as ahouse_id,tv,refrigerator,washing_machine,air_condition,wifi,beds,water_heater,chest,desk,cooking
+        from house h,feature f,allocation a
+        where h.house_id = f.house_id and h.house_id = a.house_id
+        <where>
+            <if test="house_id != null">h.house_id = #{house_id}</if>
+            <if test="title != null and title !=''">and title like concat('%',#{title},'%')</if>
+            <if test="city != null and city !=''">and city = #{city}</if>
+            <if test="region != null and region !=''">and region = #{region}</if>
+            <if test="address != null and address !=''">and address = #{address}</if>
+            <if test="house_type != null and house_type !=''">and house_type = #{house_type}</if>
+            <if test="rent != null and rent !=''">and rent = #{rent}</if>
+            <if test="rent_way != null and rent_way !=''">and rent_way = #{rent_way}</if>
+            <if test="rent_type != null and rent_type !=''">and rent_type = #{rent_type}</if>
+            <if test="number_of_people != null">and number_of_people = #{number_of_people}</if>
+            <if test="elevator != null and elevator !=''">and elevator = #{elevator}</if>
+            <if test="toward != null and toward !=''">and toward = #{toward}</if>
+            <if test="carport != null and carport !=''">and carport = #{carport}</if>
+            <if test="energy_charge != null and energy_charge !=''">and energy_charge = #{energy_charge}</if>
+            <if test="water_charge != null and water_charge !=''">and water_charge = #{water_charge}</if>
+            <if test="acreage != null and acreage !=''">and acreage = #{acreage}</if>
+            <if test="layout != null and layout !=''">and layout = #{layout}</if>
+            <if test="introduction != null and introduction !=''">and introduction = #{introduction}</if>
+            <if test="status != null and status !=''">and status = #{status}</if>
         </where>
     </select>
 
     <select id="findHouseByUserId" resultMap="houseByUserIdMap">
         select l.user_id,l.house_id as lhouse_id,l.relation_id,l.publish_time,
-        h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,feature_id,acreage,layout,allocation_id,introduction,status,picture,pictureUrl
+        h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl
         from landlord_house_relation l
         left join house h
         on l.house_id = h.house_id
         where l.user_id = #{user_id}
     </select>
 
-    <insert id="insert" parameterType="House">
-        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,feature_id,acreage,layout,allocation_id,introduction,status,picture,pictureUrl)
-        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{feature_id},#{acreage},#{layout},#{allocation_id},#{introduction},#{status},#{picture},#{pictureUrl})
+    <insert id="insert" parameterType="House" useGeneratedKeys="true" keyProperty="house_id" keyColumn="house_id">
+        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl)
+        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{acreage},#{layout},#{introduction},#{status},#{picture},#{pictureUrl})
     </insert>
 
     <delete id="deleteById" flushCache="true">
-        delete house,landlord_house_relation from house,landlord_house_relation where house_id=#{house_id} and house.house_id = landlord_house_relation.house_id
+        delete h,lhr,f,a
+        from house h,landlord_house_relation lhr,feature f,allocation a
+        where house_id=#{house_id} and h.house_id = lhr.house_id and h.house_id = lhr.house_id and h.house_id = f.house_id and h.house_id = a.house_id
     </delete>
 
     <update id="update" parameterType="House">
@@ -125,10 +200,8 @@
             <if test="carport !=null and carport !=''">carport=#{carport},</if>
             <if test="energy_charge !=null and energy_charge !=''">energy_charge=#{energy_charge},</if>
             <if test="water_charge !=null and water_charge !=''">water_charge=#{water_charge},</if>
-            <if test="feature_id !=null">feature_id=#{feature_id},</if>
             <if test="acreage !=null and acreage !=''">acreage=#{acreage},</if>
             <if test="layout !=null and layout !=''">layout=#{layout},</if>
-            <if test="allocation_id !=null">allocation_id=#{allocation_id},</if>
             <if test="introduction !=null and introduction !=''">introduction=#{introduction},</if>
             <if test="status !=null and status !=''">status=#{status},</if>
             <if test="picture !=null and picture !=''">picture=#{picture},</if>

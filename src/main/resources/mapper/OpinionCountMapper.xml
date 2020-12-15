@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.OpinionCountMapper">
+
+    <resultMap id="opinionMap" type="OpinionCount">
+        <id property="opinion_id" column="opinion_id"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="find" resultMap="opinionMap">
+        select *
+        from opinion_count
+    </select>
+
+    <insert id="insert" parameterType="OpinionCount">
+        insert into opinion_count(opinion_id,count)
+        values(#{opinion_id},#{count})
+    </insert>
+
+    <delete id="deleteById" flushCache="true">
+        delete from opinion_count where opinion_id=#{opinion_id}
+    </delete>
+
+    <update id="update" parameterType="OpinionCount">
+        update
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="count !=null">count=#{count},</if>
+        </trim>
+        where opinion_id=#{opinion_id}
+    </update>
+
+</mapper>

@@ -1,7 +1,9 @@
 package com.example.live.controller;
 
+import com.example.live.pojo.OpinionCount;
 import com.example.live.pojo.User;
 import com.example.live.pojo.UserOpinion;
+import com.example.live.service.OpinionCountService;
 import com.example.live.service.UserOpinionService;
 import com.example.live.utils.ImgToJson;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -28,28 +30,34 @@ public class UserOpinionController {
     @Autowired
     private UserOpinionService userOpinionService;
 
+    @Autowired
+    private OpinionCountService opinionCountService;
+
     public String uoloadPath="D:\\live\\pictures";
 
     @RequestMapping(value = "insertOpinion",method = RequestMethod.POST)
     public String insertOpinion(UserOpinion userOpinion, HttpSession session){
-        //将图片转为二进制格式的数据
-        ImgToJson img = new ImgToJson();
-        File file = new File(uoloadPath);
-        String fileName = userOpinion.getPicture();
-        File uploadFile=new File(file+File.separator+fileName);
-        System.out.println(userOpinion.getOpinion()+"\t"+userOpinion.getPicture()+"\t"+uploadFile.toString());
-        String imgData = img.getImageBinary(uploadFile.toString());
-        //将构造对象存储数据，并持久化
-        Long time = System.currentTimeMillis();
-        String pictureUrl = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\"+time.toString()+".jpg";
-        String pictureName = time.toString()+".jpg";
+        //有图片才进行转码
+        if (userOpinion.getPicture() !=null){
+            //将图片转为二进制格式的数据
+            ImgToJson img = new ImgToJson();
+            File file = new File(uoloadPath);
+            String fileName = userOpinion.getPicture();
+            File uploadFile=new File(file+File.separator+fileName);
+            String imgData = img.getImageBinary(uploadFile.toString());
+            //将构造对象存储数据，并持久化
+            Long time = System.currentTimeMillis();
+            String pictureUrl = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\"+time.toString()+".jpg";
+            String pictureName = time.toString()+".jpg";
+            userOpinion.setPicture(imgData);
+            userOpinion.setPictureUrl(pictureUrl);
+            userOpinion.setPicture_name(pictureName);
+        }
         User user = (User) session.getAttribute("userLoginInfo");
         userOpinion.setUser_id(user.getUser_id());
-        userOpinion.setPicture(imgData);
-        userOpinion.setPictureUrl(pictureUrl);
-        userOpinion.setPicture_name(pictureName);
-//        System.out.println(pictureName);
         userOpinionService.insert(userOpinion);
+        OpinionCount opinionCount = new OpinionCount(userOpinion.getOpinion_id(),0);
+        opinionCountService.insert(opinionCount);
         return "login";
     }
 
@@ -67,6 +75,7 @@ public class UserOpinionController {
             System.out.println(savePath);
             img.base64StringToImage(savePath,userOpinion.getPicture());
             userOpinion.setPath("/imgs/"+userOpinion.getPicture_name());
+            userOpinion.setPicture(userOpinion.getPictureUrl());
             System.out.println(userOpinion.getPath());
         }
         model.addAttribute("userOpinions",userOpinions);
@@ -81,7 +90,9 @@ public class UserOpinionController {
 
     @RequestMapping(value = "updateUserOpinion",method = RequestMethod.GET)
     public String updateUserOpinion(UserOpinion userOpinionDto){
-//        userOpinionDto = new UserOpinion(5,1,"update opinion","test update",5,"D:\\live\\imgs\\1607481426920.jpg");
+        ImgToJson img = new ImgToJson();
+        String imgData = img.getImageBinary(userOpinionDto.getPicture());
+        userOpinionDto.setPicture(imgData);
         userOpinionService.update(userOpinionDto);
         return "login";
     }

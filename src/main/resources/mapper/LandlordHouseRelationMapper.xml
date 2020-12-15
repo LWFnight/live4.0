@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.live.mapper.LandlordHouseRelationMapper">
+
+    <resultMap id="landlordHouseRelationMap" type="LandlordHouseRelation">
+        <id property="relation_id" column="relation_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="house_id" column="house_id"/>
+        <result property="publish_time" column="publish_time"/>
+    </resultMap>
+
+    <select id="find" resultMap="landlordHouseRelationMap">
+        select *
+        from landlord_house_relation
+        where relation_id=#{relation_id}
+    </select>
+
+    <insert id="insert" parameterType="LandlordHouseRelation">
+        insert into landlord_house_relation(user_id,house_id,publish_time)
+        value(#{user_id},#{house_id},NOW())
+    </insert>
+
+    <delete id="deleteById" flushCache="true">
+        delete from landlord_house_relation where relation_id=#{relation_id}
+    </delete>
+
+    <update id="update" parameterType="LandlordHouseRelation">
+        update landlord_house_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="a !=null and a !=''">a=#{a},</if>
+        </trim>
+        where relation_id=#{relation_id}
+    </update>
+
+</mapper>

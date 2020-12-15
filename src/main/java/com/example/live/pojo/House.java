@@ -16,24 +16,24 @@ public class House {
     private String carport;
     private String energy_charge;
     private String water_charge;
-    private Integer feature_id;
     private String acreage;
     private String layout;
-    private Integer allocation_id;
     private String introduction;
     private String status;
     private String picture;
     private String pictureUrl;
+    private String time;
 
     private LandlordHouseRelation landlordHouseRelation;
 
     private Allocation allocation;
 
+    private Feature feature;
+
     public House() {
     }
 
-    public House(Integer house_id, String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, Integer feature_id, String acreage, String layout, Integer allocation_id, String introduction, String status, String picture, String pictureUrl) {
-        this.house_id = house_id;
+    public House(String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, String acreage, String layout, String introduction, String status, String picture, String pictureUrl, LandlordHouseRelation landlordHouseRelation, Allocation allocation) {
         this.title = title;
         this.city = city;
         this.region = region;
@@ -48,14 +48,14 @@ public class House {
         this.carport = carport;
         this.energy_charge = energy_charge;
         this.water_charge = water_charge;
-        this.feature_id = feature_id;
         this.acreage = acreage;
         this.layout = layout;
-        this.allocation_id = allocation_id;
         this.introduction = introduction;
         this.status = status;
         this.picture = picture;
         this.pictureUrl = pictureUrl;
+        this.landlordHouseRelation = landlordHouseRelation;
+        this.allocation = allocation;
     }
 
     public Integer getHouse_id() {
@@ -178,14 +178,6 @@ public class House {
         this.water_charge = water_charge;
     }
 
-    public Integer getFeature_id() {
-        return feature_id;
-    }
-
-    public void setFeature_id(Integer feature_id) {
-        this.feature_id = feature_id;
-    }
-
     public String getAcreage() {
         return acreage;
     }
@@ -200,14 +192,6 @@ public class House {
 
     public void setLayout(String layout) {
         this.layout = layout;
-    }
-
-    public Integer getAllocation_id() {
-        return allocation_id;
-    }
-
-    public void setAllocation_id(Integer allocation_id) {
-        this.allocation_id = allocation_id;
     }
 
     public String getIntroduction() {
@@ -256,5 +240,21 @@ public class House {
 
     public void setAllocation(Allocation allocation) {
         this.allocation = allocation;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Feature getFeature() {
+        return feature;
+    }
+
+    public void setFeature(Feature feature) {
+        this.feature = feature;
     }
 }

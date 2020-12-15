@@ -18,6 +18,11 @@ public class LandlordHouseRelation {
         this.publish_time = publish_time;
     }
 
+    public LandlordHouseRelation(Integer user_id, Integer house_id) {
+        this.user_id = user_id;
+        this.house_id = house_id;
+    }
+
     public Integer getUser_id() {
         return user_id;
     }

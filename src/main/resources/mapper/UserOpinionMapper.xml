@@ -5,27 +5,64 @@
 
     <resultMap id="userOpinionMap" type="UserOpinion">
         <id property="opinion_id" column="uoopinion_id"/>
-        <result property="user_id" column="user_id"/>
+        <result property="user_id" column="uouser_id"/>
         <result property="opinion" column="opinion"/>
         <result property="picture" column="picture"/>
         <result property="star" column="star"/>
         <result property="pictureUrl" column="pictureUrl"/>
         <result property="picture_name" column="picture_name"/>
+        <result property="house_id" column="uohouse_id"/>
         <association property="opinionCount" javaType="OpinionCount">
             <id property="opinion_id" column="ocopinion_id"/>
             <result property="count" column="count"/>
         </association>
+        <association property="user" javaType="User">
+            <id property="user_id" column="uuser_id"/>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+            <result property="role_id" column="urole_id"/>
+            <result property="phone" column="phone"/>
+        </association>
+        <association property="house" javaType="House">
+            <id property="house_id" column="hhouse_id"/>
+            <result property="title" column="title"/>
+            <result property="city" column="city"/>
+            <result property="region" column="region"/>
+            <result property="address" column="address"/>
+            <result property="house_type" column="house_type"/>
+            <result property="rent" column="rent"/>
+            <result property="rent_way" column="rent_way"/>
+            <result property="rent_type" column="rent_type"/>
+            <result property="number_of_people" column="number_of_people"/>
+            <result property="elevator" column="elevator"/>
+            <result property="toward" column="toward"/>
+            <result property="carport" column="carport"/>
+            <result property="energy_charge" column="energy_charge"/>
+            <result property="water_charge" column="water_charge"/>
+            <result property="feature_id" column="feature_id"/>
+            <result property="acreage" column="acreage"/>
+            <result property="layout" column="layout"/>
+            <result property="allocation_id" column="allocation_id"/>
+            <result property="introduction" column="introduction"/>
+            <result property="status" column="status"/>
+        </association>
     </resultMap>
 
     <select id="find" resultMap="userOpinionMap">
-        select uo.opinion_id as uoopinion_id,user_id,opinion,picture,star,pictureUrl,picture_name,
-        oc.opinion_id as ocopinion_id,oc.count
-        from user_opinion uo,opinion_count oc
-        where uo.opinion_id = oc.opinion_id and user_id = #{user_id}
+        select uo.opinion_id as uoopinion_id,uo.user_id as uouser_id,uo.opinion,uo.picture,uo.star,uo.pictureUrl,uo.picture_name,uo.house_id as uohouse_id,
+        oc.opinion_id as ocopinion_id,oc.count,
+        u.user_id as uuser_id,u.name,u.gender,u.email,u.phone,
+	    h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status
+        from user_opinion uo,opinion_count oc,house h,user u
+        where uo.opinion_id = oc.opinion_id and uo.house_id=h.house_id and uo.user_id = u.user_id
+        <if test="user_id !=null">and uo.user_id = #{user_id}</if>
+        <if test="house_id !=null">and uo.house_id = #{house_id}</if>
     </select>
 
-    <insert id="insert" parameterType="UserOpinion">
-        insert into user_opinion(user_id,opinion,picture,star,pictureUrl,picture_name)
+    <insert id="insert" parameterType="UserOpinion" useGeneratedKeys="true" keyProperty="opinion_id" keyColumn="opinion_id">
+        insert into user_opinion(user_id,opinion,picture,star,pictureUrl,picture_name，)
         values(#{user_id},#{opinion},#{picture},#{star},#{pictureUrl},#{picture_name})
     </insert>
 

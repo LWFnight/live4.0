@@ -45,7 +45,6 @@ public class UserController {
     @RequestMapping(value = "findUsers",method = RequestMethod.GET)
     public String findUsers(User userdto,Model model){
         List<User> users = new ArrayList<>();
-        userdto.setName("U");
         users = userService.findUsers(userdto);
         model.addAttribute("users",users);
         for (User user : users) {
@@ -66,8 +65,12 @@ public class UserController {
 
     @RequestMapping(value = "insertUser",method = RequestMethod.GET)
     public String insertUser(User userdto){
-        userdto = new User("test","男","123233@qq.com","123",4,"123423");
-        userService.insertUser(userdto);
+        User user = new User();
+        user.setEmail(userdto.getEmail());
+        user.setPhone(userdto.getPhone());
+        if (userService.findUsers(user).size() ==0){
+            userService.insertUser(userdto);
+        }
         return "redirect:/findUsers";
     }
 

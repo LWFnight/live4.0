@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface HouseMapper extends BaseMapper<House> {
     List<House> findHouseByUserId(Integer user_id);
+    List<House> findHouseDetail(House house);
 }

@@ -37,4 +37,9 @@ public class HouseServiceImpl implements HouseService {
     public List<House> findHouseByUserId(Integer user_id) {
         return houseMapper.findHouseByUserId(user_id);
     }
+
+    @Override
+    public List<House> findHouseDetail(House house) {
+        return houseMapper.findHouseDetail(house);
+    }
 }

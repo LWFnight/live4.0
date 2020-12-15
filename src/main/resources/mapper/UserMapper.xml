@@ -35,6 +35,7 @@
             <result property="age" column="age"/>
             <result property="job" column="job"/>
             <result property="hobby" column="hobby"/>
+            <result property="nick_name" column="nick_name"/>
         </association>
     </resultMap>
 
@@ -46,7 +47,7 @@
         <if test="name !=null and name !=''">and u.name like concat('%',#{name},'%')</if>
         <if test="gender !=null and gender !=''">and gender=#{gender}</if>
         <if test="email !=null and email !=''">and email=#{email}</if>
-        <if test="phone !=null and phone !=''">and phone=#{phone}</if>
+        <if test="phone !=null and phone !=''">or phone=#{phone}</if>
     </select>
 
     <select id="findUserPersonalInfo" resultMap="userPersonalInfoMap">
@@ -59,7 +60,7 @@
         and u.role_id = r.role_id
     </select>
 
-    <insert id="insertUser" parameterType="User">
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="user_id" keyColumn="user_id">
         insert into user(name,gender,email,password,role_id,phone)
         values(#{name},#{gender},#{email},#{password},#{role_id},#{phone})
     </insert>
