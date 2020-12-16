@@ -1,7 +1,9 @@
 package com.example.live.controller;
 
 import com.example.live.pojo.Agent;
+import com.example.live.pojo.User;
 import com.example.live.service.AgentService;
+import com.example.live.service.UserService;
 import com.example.live.utils.ImgToJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,9 @@ public class AgentController {
     @Autowired
     private AgentService agentService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "insertAgent",method = RequestMethod.POST)
     public String insertAgent(Agent agent, MultipartFile mpf, HttpServletRequest request) throws Exception{
         if (!mpf.isEmpty()){
@@ -39,6 +44,7 @@ public class AgentController {
             agent.setPhoto_save_path(photoSavePath);
             agent.setPhoto_name(photoName);
         }
+        agent.setStatus(0);
         agentService.insert(agent);
         return "login";
     }
@@ -81,7 +87,29 @@ public class AgentController {
             agent.setPhoto_save_path(photoSavePath);
             agent.setPhoto_name(photoName);
         }
+        agent.setStatus(0);
         agentService.update(agent);
+        User user = new User();
+        user.setUser_id(agent.getUser_id());
+        user.setRole_id(4);
+        userService.updateUser(user);
+        return "login";
+    }
+
+    @RequestMapping(value = "adminUpdateAgent",method = RequestMethod.POST)
+    public String  adminUpdateAgent(Agent agent){
+        User user = new User();
+        if (agent.getStatus() == 1){
+            user.setUser_id(agent.getUser_id());
+            user.setRole_id(5);
+            userService.updateUser(user);
+            agentService.update(agent);
+        }else {
+            user.setUser_id(agent.getUser_id());
+            user.setRole_id(4);
+            userService.updateUser(user);
+            agentService.update(agent);
+        }
         return "login";
     }
 

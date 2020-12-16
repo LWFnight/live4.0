@@ -7,7 +7,7 @@ public class Agent {
     private Integer star;
     private String real_name;
     private String photo;
-    private Integer status;
+    private Integer status;//0:待审批,1:审批通过,2:审批不通过
     private String photo_save_path;
     private String photo_name;
 

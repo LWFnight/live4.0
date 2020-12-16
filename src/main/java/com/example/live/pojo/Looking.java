@@ -15,6 +15,8 @@ public class Looking {
 
     private House house;
 
+    private Agent agent;
+
     public Looking() {
     }
 
@@ -98,5 +100,13 @@ public class Looking {
 
     public void setHouse(House house) {
         this.house = house;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 }

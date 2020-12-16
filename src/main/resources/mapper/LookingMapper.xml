@@ -9,7 +9,7 @@
         <result property="house_id" column="lhouse_id"/>
         <result property="date" column="date"/>
         <result property="site" column="site"/>
-        <result property="agent_id" column="agent_id"/>
+        <result property="agent_id" column="lagent_id"/>
         <result property="status" column="status"/>
         <association property="user" javaType="User">
             <id property="user_id" column="uuser_id"></id>
@@ -39,16 +39,31 @@
             <result property="acreage" column="acreage"/>
             <result property="layout" column="layout"/>
             <result property="introduction" column="introduction"/>
-            <result property="status" column="status"/>
+            <result property="status" column="hstatus"/>
             <result property="picture" column="picture"/>
             <result property="pictureUrl" column="pictureUrl"/>
             <result property="picture_name" column="picture_name"/>
         </association>
+        <association property="agent" javaType="Agent">
+            <id property="agent_id" column="aagent_id"/>
+            <result property="user_id" column="auser_id"/>
+            <result property="work_time" column="work_time"/>
+            <result property="star" column="star"/>
+            <result property="real_name" column="real_name"/>
+            <result property="photo" column="photo"/>
+            <result property="status" column="astatus"/>
+            <result property="photo_save_path" column="photo_save_path"/>
+            <result property="photo_name" column="photo_name"/>
+        </association>
     </resultMap>
 
     <select id="find" resultMap="lookMap">
-        select *
-        from looking
+        select looking_id,l.user_id as luser_id,l.house_id as lhouseid,l.date,l.site,l.agent_id as lagent_id,l.status,
+        u.user_id as uuser_id,name,gender,email,password,role_id,phone,
+        h.house_id as hhouse_id,h.title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,h.status as hstatus,picture,pictureUrl,picture_name,province,
+        a.agent_id as aagent_id,a.user_id as auser_id,a.work_time,a.star,a.real_name,a.photo,a.status as astatus,a.photo_save_path,a.photo_name
+        from looking l,user u,house h,agent a
+        where l.house_id = h.house_id and l.agent_id=a.agent_id and l.user_id = u.user_id
         <where>
             <if test="looking_id != null">and looking_id = #{looking_id}</if>
             <if test="user_id != null">and user_id = #{user_id}</if>
@@ -61,28 +76,31 @@
     </select>
 
     <select id="findHistoryLooking" resultMap="lookMap">
-        select *
-        from looking
-        where status='2'
-        <if test="user_id != null">and user_id = #{user_id}</if>
-        <if test="house_id != null">and house_id = #{house_id}</if>
+        select looking_id,l.user_id as luser_id,l.house_id as lhouseid,l.date,l.site,l.agent_id as lagent_id,l.status,
+        u.user_id as uuser_id,name,gender,email,password,role_id,phone,
+        h.house_id as hhouse_id,h.title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,h.status as hstatus,picture,pictureUrl,picture_name,province,
+        a.agent_id as aagent_id,a.user_id as auser_id,a.work_time,a.star,a.real_name,a.photo,a.status as astatus,a.photo_save_path,a.photo_name
+        from looking l,user u,house h,agent a
+        where l.status='2'and l.house_id = h.house_id and l.agent_id=a.agent_id and l.user_id = u.user_id
+        <if test="user_id != null">and l.user_id = #{user_id}</if>
+        <if test="house_id != null">and l.house_id = #{house_id}</if>
         <if test="date != null and date != ''">and date = #{date}</if>
         <if test="site != null and site != ''">and site = #{site}</if>
-        <if test="agent_id != null">and agent_id = #{agent_id}</if>
+        <if test="agent_id != null">and l.agent_id = #{agent_id}</if>
         <if test="status != null">and status = #{status}</if>
     </select>
 
     <insert id="insert" parameterType="Looking">
-        insert into (user_id,house_id,date,site,agent_id,status)
+        insert into looking(user_id,house_id,date,site,agent_id,status)
         values(#{user_id},#{house_id},#{date},#{site},#{agent_id},#{status})
     </insert>
 
     <delete id="deleteById" flushCache="true">
-        delete from where looking_id=#{looking_id}
+        delete from looking where looking_id=#{looking_id}
     </delete>
 
     <update id="update" parameterType="Looking">
-        update
+        update looking
         <trim prefix="SET" suffixOverrides=",">
             <if test="agent_id !=null">agent_id=#{agent_id},</if>
             <if test="status !=null">status=#{status},</if>
