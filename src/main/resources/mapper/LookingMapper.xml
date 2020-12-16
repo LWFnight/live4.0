@@ -5,12 +5,45 @@
 
     <resultMap id="lookMap" type="Looking">
         <id property="looking_id" column="looking_id"/>
-        <result property="user_id" column="user_id"/>
-        <result property="house_id" column="house_id"/>
+        <result property="user_id" column="luser_id"/>
+        <result property="house_id" column="lhouse_id"/>
         <result property="date" column="date"/>
         <result property="site" column="site"/>
         <result property="agent_id" column="agent_id"/>
         <result property="status" column="status"/>
+        <association property="user" javaType="User">
+            <id property="user_id" column="uuser_id"></id>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+            <result property="role_id" column="urole_id"/>
+            <result property="phone" column="phone"/>
+        </association>
+        <association property="house" javaType="House">
+            <id property="house_id" column="hhouse_id"/>
+            <result property="title" column="title"/>
+            <result property="city" column="city"/>
+            <result property="region" column="region"/>
+            <result property="address" column="address"/>
+            <result property="house_type" column="house_type"/>
+            <result property="rent" column="rent"/>
+            <result property="rent_way" column="rent_way"/>
+            <result property="rent_type" column="rent_type"/>
+            <result property="number_of_people" column="number_of_people"/>
+            <result property="elevator" column="elevator"/>
+            <result property="toward" column="toward"/>
+            <result property="carport" column="carport"/>
+            <result property="energy_charge" column="energy_charge"/>
+            <result property="water_charge" column="water_charge"/>
+            <result property="acreage" column="acreage"/>
+            <result property="layout" column="layout"/>
+            <result property="introduction" column="introduction"/>
+            <result property="status" column="status"/>
+            <result property="picture" column="picture"/>
+            <result property="pictureUrl" column="pictureUrl"/>
+            <result property="picture_name" column="picture_name"/>
+        </association>
     </resultMap>
 
     <select id="find" resultMap="lookMap">

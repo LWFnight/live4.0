@@ -11,13 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class HouseController {
@@ -37,18 +40,20 @@ public class HouseController {
     private String savePath = "D:\\中软实训\\live\\src\\main\\resources\\static\\imgs\\";
 
     @RequestMapping(value = "insertHouse",method = RequestMethod.POST)
-    public String insertHouse(House house,HttpSession session){
-        if (house.getPicture() !=null){
+    public String insertHouse(House house, HttpSession session, MultipartFile mpf, HttpServletRequest request) throws Exception{
+        if (!mpf.isEmpty()){
+            //临时文件夹下创建图片
+            String saveFileName = UUID.randomUUID().toString().replaceAll("-", "")+"_"+mpf.getOriginalFilename();
+            String filePath = request.getServletContext().getRealPath("")+"\\"+saveFileName;
+            File f = new File(filePath);
+            f.createNewFile();
+            mpf.transferTo(f);
             ImgToJson img = new ImgToJson();
-            String uploadPath = "D:\\live\\pictures\\";
-            File file = new File(uploadPath);
-            String fileName = house.getPicture();
-            File uploadFile=new File(file+File.separator+fileName);
-            String imgData = img.getImageBinary(uploadFile.toString());
+            String imgData = img.getImageBinary(filePath);
             house.setPicture(imgData);
-            String pictureUrl = savePath+house.getHouse_id().toString()+".jpg";
+            String pictureUrl = savePath+house.getHouse_id().toString()+house.getTitle()+".jpg";
             house.setPictureUrl(pictureUrl);
-            house.setPicture_name(house.getHouse_id().toString()+".jpg");
+            house.setPicture_name(house.getHouse_id().toString()+house.getTitle()+".jpg");
         }
         houseService.insert(house);
         Allocation allocation = new Allocation(house.getHouse_id(),0,0,0,0,0,0,0,0,0,0);
@@ -115,14 +120,20 @@ public class HouseController {
     }
 
     @RequestMapping(value = "updateHouse",method = RequestMethod.GET)
-    public String updateHouse(House house){
-        if (house.getPicture() !=null){
+    public String updateHouse(House house, MultipartFile mpf, HttpServletRequest request) throws Exception{
+        if (!mpf.isEmpty()){
+            //临时文件夹下创建图片
+            String saveFileName = UUID.randomUUID().toString().replaceAll("-", "")+"_"+mpf.getOriginalFilename();
+            String filePath = request.getServletContext().getRealPath("")+"\\"+saveFileName;
+            File f = new File(filePath);
+            f.createNewFile();
+            mpf.transferTo(f);
             ImgToJson img = new ImgToJson();
-            String uploadPath = house.getPicture();
-            String imgData = img.getImageBinary(uploadPath);
+            String imgData = img.getImageBinary(filePath);
             house.setPicture(imgData);
             String pictureUrl = savePath+house.getHouse_id().toString()+".jpg";
             house.setPictureUrl(pictureUrl);
+            house.setPicture_name(house.getHouse_id().toString()+house.getTitle()+".jpg");
         }
         houseService.update(house);
         return "login";

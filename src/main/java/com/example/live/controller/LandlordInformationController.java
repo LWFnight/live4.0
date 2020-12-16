@@ -12,11 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @SessionAttributes(value = {"landlordInformations"})
@@ -58,21 +61,31 @@ public class LandlordInformationController {
     }
 
     @RequestMapping(value = "insertLandlordInformation",method = RequestMethod.POST)
-    public String insertLandlordInformation(LandlordInformation landlordInformation, HttpSession session){
+    public String insertLandlordInformation(LandlordInformation landlordInformation, MultipartFile ipf,MultipartFile ipr, HttpServletRequest request) throws Exception{
         //构造对象
-        User user = (User) session.getAttribute("userLoginInfo");
-        landlordInformation.setUser_id(user.getUser_id());
+//        User user = (User) session.getAttribute("userLoginInfo");
+//        landlordInformation.setUser_id(user.getUser_id());
+        //创建两张图片
+        //身份证正面
+        String saveFileNamef = UUID.randomUUID().toString().replaceAll("-", "") + "_" + ipf.getOriginalFilename();
+        String filePathf = request.getServletContext().getRealPath("") + "\\" + saveFileNamef;
+        File f = new File(filePathf);
+        f.createNewFile();
+        ipf.transferTo(f);
+        //身份证反面
+        String saveFileNamer = UUID.randomUUID().toString().replaceAll("-", "") + "_" + ipr.getOriginalFilename();
+        String filePathr = request.getServletContext().getRealPath("") + "\\" + saveFileNamer;
+        File r = new File(filePathf);
+        f.createNewFile();
+        ipr.transferTo(r);
         //将图片转为二进制格式的数据
         ImgToJson img = new ImgToJson();
-        File file = new File("D:\\live\\pictures");
         String idPicturefName = landlordInformation.getId_card_picture_f();
-        File uploadidPicturef=new File(file+File.separator+idPicturefName);
         String idPicturerName = landlordInformation.getId_card_picture_r();
-        File uploadidPicturer=new File(file+File.separator+idPicturerName);
-        String idPicturefData = img.getImageBinary(uploadidPicturef.toString());//身份证正面照片图片数据
+        String idPicturefData = img.getImageBinary(filePathf);//身份证正面照片图片数据
         String idPicturefDataUrl = savePath+"\\"+landlordInformation.getId_number().toString()+"f.jpg";//身份证正面照片图片数据保存路径
         String idPicturefSaveName = landlordInformation.getId_number().toString()+"f.jpg";
-        String idPicturerData = img.getImageBinary(uploadidPicturer.toString());//身份证反面照片图片数据
+        String idPicturerData = img.getImageBinary(filePathr);//身份证反面照片图片数据
         String idPicturerDataUrl = savePath+"\\"+landlordInformation.getId_number().toString()+"r.jpg";//身份证反面照片图片数据保存路径
         String idPicturerSaveName = landlordInformation.getId_number().toString()+"r.jpg";
         //只有没有成为房东的才可以注册成为房东,一个身份证只能绑定一个房东
@@ -106,17 +119,35 @@ public class LandlordInformationController {
     }
 
     @RequestMapping(value = "userUpdateLandlordInfomation",method = RequestMethod.POST)
-    public String  userUpdateLandlordInfomation(LandlordInformation landlordInformation,HttpSession session){
-        User user = (User) session.getAttribute("userLoginInfo");
-        landlordInformation.setUser_id(user.getUser_id());
+    public String  userUpdateLandlordInfomation(LandlordInformation landlordInformation, MultipartFile ipf,MultipartFile ipr, HttpServletRequest request) throws Exception{
+//        User user = (User) session.getAttribute("userLoginInfo");
+//        landlordInformation.setUser_id(user.getUser_id());
+        //创建两张图片
+        //身份证正面
+        String saveFileNamef = UUID.randomUUID().toString().replaceAll("-", "") + "_" + ipf.getOriginalFilename();
+        String filePathf = request.getServletContext().getRealPath("") + "\\" + saveFileNamef;
+        File f = new File(filePathf);
+        f.createNewFile();
+        ipf.transferTo(f);
+        //身份证反面
+        String saveFileNamer = UUID.randomUUID().toString().replaceAll("-", "") + "_" + ipr.getOriginalFilename();
+        String filePathr = request.getServletContext().getRealPath("") + "\\" + saveFileNamer;
+        File r = new File(filePathf);
+        f.createNewFile();
+        ipr.transferTo(r);
+        //将图片转为二进制格式的数据
+        ImgToJson img = new ImgToJson();
+        String idPicturefData = img.getImageBinary(filePathf);//身份证正面照片图片数据
+        String idPicturerData = img.getImageBinary(filePathr);//身份证反面照片图片数据
+        landlordInformation.setId_card_picture_f(idPicturefData);
+        landlordInformation.setId_card_picture_r(idPicturerData);
         //所有普通用户更新房东信息都要重新审批
         landlordInformation.setStatus("待审批");
-
         landlordInformationService.update(landlordInformation);
-        User user1 = new User();
-        user1.setUser_id(landlordInformation.getUser_id());
-        user1.setRole_id(4);
-        userService.updateUser(user1);
+        User user = new User();
+        user.setUser_id(landlordInformation.getUser_id());
+        user.setRole_id(4);
+        userService.updateUser(user);
         return "login";
     }
 

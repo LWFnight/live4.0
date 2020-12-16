@@ -17,13 +17,13 @@ public class House {
     private String energy_charge;
     private String water_charge;
     private String acreage;
-    private String layout;
     private String introduction;
     private String status;
     private String picture;
     private String pictureUrl;
     private String picture_name;
     private String time;
+    private String province;
 
     private LandlordHouseRelation landlordHouseRelation;
 
@@ -31,11 +31,12 @@ public class House {
 
     private Feature feature;
 
+    private User user;
+
     public House() {
     }
 
-    public House(Integer house_id, String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, String acreage, String layout, String introduction, String status, String picture, String pictureUrl, String picture_name, String time) {
-        this.house_id = house_id;
+    public House(String title, String city, String region, String address, String house_type, String rent, String rent_way, String rent_type, Integer number_of_people, String elevator, String toward, String carport, String energy_charge, String water_charge, String acreage,String introduction, String status, String picture, String pictureUrl, String picture_name, String province) {
         this.title = title;
         this.city = city;
         this.region = region;
@@ -51,13 +52,12 @@ public class House {
         this.energy_charge = energy_charge;
         this.water_charge = water_charge;
         this.acreage = acreage;
-        this.layout = layout;
         this.introduction = introduction;
         this.status = status;
         this.picture = picture;
         this.pictureUrl = pictureUrl;
         this.picture_name = picture_name;
-        this.time = time;
+        this.province = province;
     }
 
     public Integer getHouse_id() {
@@ -188,14 +188,6 @@ public class House {
         this.acreage = acreage;
     }
 
-    public String getLayout() {
-        return layout;
-    }
-
-    public void setLayout(String layout) {
-        this.layout = layout;
-    }
-
     public String getIntroduction() {
         return introduction;
     }
@@ -266,5 +258,21 @@ public class House {
 
     public void setPicture_name(String picture_name) {
         this.picture_name = picture_name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 }

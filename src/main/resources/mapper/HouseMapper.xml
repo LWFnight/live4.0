@@ -20,12 +20,27 @@
         <result property="energy_charge" column="energy_charge"/>
         <result property="water_charge" column="water_charge"/>
         <result property="acreage" column="acreage"/>
-        <result property="layout" column="layout"/>
         <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
         <result property="picture_name" column="picture_name"/>
+        <result property="province" column="province"/>
+        <association property="landlordHouseRelation" javaType="LandlordHouseRelation">
+            <id property="relation_id" column="relation_id"/>
+            <result property="user_id" column="user_id"/>
+            <result property="house_id" column="lhouse_id"/>
+            <result property="publish_time" column="publish_time"/>
+        </association>
+        <association property="user" javaType="User">
+            <id property="user_id" column="user_id"></id>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+            <result property="role_id" column="urole_id"/>
+            <result property="phone" column="phone"/>
+        </association>
     </resultMap>
 
     <resultMap id="houseDetailMap" type="House">
@@ -45,12 +60,12 @@
         <result property="energy_charge" column="energy_charge"/>
         <result property="water_charge" column="water_charge"/>
         <result property="acreage" column="acreage"/>
-        <result property="layout" column="layout"/>
         <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
         <result property="picture_name" column="picture_name"/>
+        <result property="province" column="province"/>
         <association property="allocation" javaType="Allocation">
             <id property="house_id" column="ahouse_id"/>
             <result property="tv" column="tv"/>
@@ -96,13 +111,13 @@
         <result property="water_charge" column="water_charge"/>
         <result property="feature_id" column="feature_id"/>
         <result property="acreage" column="acreage"/>
-        <result property="layout" column="layout"/>
         <result property="allocation_id" column="allocation_id"/>
         <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
         <result property="picture" column="picture"/>
         <result property="pictureUrl" column="pictureUrl"/>
         <result property="picture_name" column="picture_name"/>
+        <result property="province" column="province"/>
         <association property="landlordHouseRelation" javaType="LandlordHouseRelation">
             <id property="relation_id" column="relation_id"/>
             <result property="user_id" column="user_id"/>
@@ -112,11 +127,14 @@
     </resultMap>
 
     <select id="find" resultMap="houseMap">
-        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name
-        from house h
-        <where>
-            <if test="house_id != null">h.house_id = #{house_id}</if>
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,status,picture,pictureUrl,picture_name,province,
+        l.user_id as luser_id,l.house_id as lhouse_id,l.relation_id,l.publish_time,
+        u.user_id as uuser_id,name,gender,email,password,role_id,phone
+        from house h,landlord_house_relation l,user u
+        where h.house_id = l.house_id and l.user_id = u.user_id
+            <if test="house_id != null">and h.house_id = #{house_id}</if>
             <if test="title != null and title !=''">and title like concat('%',#{title},'%')</if>
+            <if test="province != null and province !=''">and province = #{province}</if>
             <if test="city != null and city !=''">and city = #{city}</if>
             <if test="region != null and region !=''">and region = #{region}</if>
             <if test="address != null and address !=''">and address = #{address}</if>
@@ -131,21 +149,19 @@
             <if test="energy_charge != null and energy_charge !=''">and energy_charge = #{energy_charge}</if>
             <if test="water_charge != null and water_charge !=''">and water_charge = #{water_charge}</if>
             <if test="acreage != null and acreage !=''">and acreage = #{acreage}</if>
-            <if test="layout != null and layout !=''">and layout = #{layout}</if>
             <if test="introduction != null and introduction !=''">and introduction = #{introduction}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
-        </where>
     </select>
 
     <select id="findHouseDetail" resultMap="houseDetailMap">
-        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name,
+        select h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,status,picture,pictureUrl,picture_name,province,
         f.house_id as fhouse_id,independent_bathroom,independent_balcony,smart_sock,self_decorating,first_rent,fully_furnished,nearby_subway,any_time_to_see,check_in_at_once,
         a.house_id as ahouse_id,tv,refrigerator,washing_machine,air_condition,wifi,beds,water_heater,chest,desk,cooking
         from house h,feature f,allocation a
         where h.house_id = f.house_id and h.house_id = a.house_id
-        <where>
-            <if test="house_id != null">h.house_id = #{house_id}</if>
+            <if test="house_id != null">and h.house_id = #{house_id}</if>
             <if test="title != null and title !=''">and title like concat('%',#{title},'%')</if>
+            <if test="province != null and province !=''">and province = #{province}</if>
             <if test="city != null and city !=''">and city = #{city}</if>
             <if test="region != null and region !=''">and region = #{region}</if>
             <if test="address != null and address !=''">and address = #{address}</if>
@@ -160,15 +176,13 @@
             <if test="energy_charge != null and energy_charge !=''">and energy_charge = #{energy_charge}</if>
             <if test="water_charge != null and water_charge !=''">and water_charge = #{water_charge}</if>
             <if test="acreage != null and acreage !=''">and acreage = #{acreage}</if>
-            <if test="layout != null and layout !=''">and layout = #{layout}</if>
             <if test="introduction != null and introduction !=''">and introduction = #{introduction}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
-        </where>
     </select>
 
     <select id="findHouseByUserId" resultMap="houseByUserIdMap">
         select l.user_id,l.house_id as lhouse_id,l.relation_id,l.publish_time,
-        h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl
+        h.house_id as hhouse_id,title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,status,picture,pictureUrl,picture_name,province
         from landlord_house_relation l
         left join house h
         on l.house_id = h.house_id
@@ -176,8 +190,8 @@
     </select>
 
     <insert id="insert" parameterType="House" useGeneratedKeys="true" keyProperty="house_id" keyColumn="house_id">
-        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,layout,introduction,status,picture,pictureUrl,picture_name)
-        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{acreage},#{layout},#{introduction},#{status},#{picture},#{pictureUrl},#{picture_name})
+        insert into house(title,city,region,address,house_type,rent,rent_way,rent_type,number_of_people,elevator,toward,carport,energy_charge,water_charge,acreage,introduction,status,picture,pictureUrl,picture_name,province)
+        values(#{title},#{city},#{region},#{address},#{house_type},#{rent},#{rent_way},#{rent_type},#{number_of_people},#{elevator},#{toward},#{carport},#{energy_charge},#{water_charge},#{acreage},#{introduction},#{status},#{picture},#{pictureUrl},#{picture_name},#{province})
     </insert>
 
     <delete id="deleteById" flushCache="true">
@@ -190,6 +204,7 @@
         update house
         <trim prefix="SET" suffixOverrides=",">
             <if test="title !=null and title !=''">title=#{title},</if>
+            <if test="province !=null and province !=''">province=#{province},</if>
             <if test="city !=null and city !=''">city=#{city},</if>
             <if test="address !=null and address !=''">address=#{address},</if>
             <if test="house_type !=null and house_type !=''">house_type=#{house_type},</if>
@@ -203,7 +218,6 @@
             <if test="energy_charge !=null and energy_charge !=''">energy_charge=#{energy_charge},</if>
             <if test="water_charge !=null and water_charge !=''">water_charge=#{water_charge},</if>
             <if test="acreage !=null and acreage !=''">acreage=#{acreage},</if>
-            <if test="layout !=null and layout !=''">layout=#{layout},</if>
             <if test="introduction !=null and introduction !=''">introduction=#{introduction},</if>
             <if test="status !=null and status !=''">status=#{status},</if>
             <if test="picture !=null and picture !=''">picture=#{picture},</if>

@@ -11,6 +11,10 @@ public class Looking {
     private Integer agent_id;
     private Integer status;//状态：0（已申请，待经纪人接收），1（待处理，经济人已接收），2（已完成）
 
+    private User user;
+
+    private House house;
+
     public Looking() {
     }
 
@@ -78,5 +82,21 @@ public class Looking {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
     }
 }
